@@ -10,81 +10,79 @@ library(lubridate)
 # JIRA REPORT READ AND CONVERSION TO CSV
 # note: requires additional code to deal with absence of conventional Headers in spreadsheet
 
-JIRA_assigned <- read_excel("data/PSC_JIRA_Mar20.xlsm", 
+JIRA_assigned_import <- read_excel("data/PSC_JIRA_Mar20.xlsm", 
                             sheet = "Created",
-                            col_names = c("class", "issue", "key_ident", "issue_id", "summary", "status", "resolution", "created", "resolved", "reporter", "assignee", "misc"),
+                            col_names = c("type", "issue", "key_ident", "issue_id", "summary", "stat", "resolution", "created", "resolved", "reporter", "assignee", "misc"),
                             col_type = c("text", "text", "numeric", "numeric", "text", "text", "text", "date", "date", "text", "text", "text")) %>% 
   write_csv("data/JIRA_assigned.csv")
 
-JIRA_completed <- read_excel("data/PSC_JIRA_Mar20.xlsm", 
+JIRA_completed_import <- read_excel("data/PSC_JIRA_Mar20.xlsm", 
                              sheet = "Completed",
-                             col_names = c("class", "issue", "key_ident", "issue_id", "summary", "status", "resolution", "created", "resolved", "reporter", "assignee", "misc", "misc"),
+                             col_names = c("type", "issue", "key_ident", "issue_id", "summary", "stat", "resolution", "created", "resolved", "reporter", "assignee", "misc", "misc"),
                              col_type = c("text", "text", "numeric", "numeric", "text", "text", "text", "date", "date", "text", "text", "text", "text")) %>% 
   write_csv("data/JIRA_completed.csv")
 
 
 # O2D REPORT READ AND CONVERSION TO CSV
 
-O2D_assigned <- read_excel("data/PSC_O2D_Mar20.xlsm",  #Q: possible to find/replace filenames, i.e. latest version?
+O2D_assigned_import <- read_excel("data/PSC_O2D_Mar20.xlsm",  #Q: possible to find/replace filenames, i.e. latest version?
                           sheet = "Assigned", 
                           col_names = TRUE) %>%  
   write_csv("data/O2D_assigned.csv")
 
-O2D_completed <- read_excel("data/PSC_O2D_Mar20.xlsm",
+O2D_completed_import <- read_excel("data/PSC_O2D_Mar20.xlsm",
                            sheet = "Completed", 
                            col_names = TRUE) %>%  
   write_csv("data/O2D_completed.csv")
 
-O2D_prev_month <- read_excel("data/PSC_O2D_Mar20.xlsm",
+O2D_prev_month_import <- read_excel("data/PSC_O2D_Mar20.xlsm",
                              sheet = "Open from previous mths") %>% 
   write_csv("data/O2D_prev_mths.csv")
-
-## Include additional code to dispose sheets into .csv files with appropriate naming conventions.
 
 # IMPORT CSV EXPORTS AS NEW VARIABLES
 
 # JIRA REPORT DATAFRAMES
-JIRA_open <- read_csv('data/JIRA_assigned.csv')             
-JIRA_completed <- read_csv('data/JIRA_completed.csv')
+JIRA_open_init1 <- read_csv('data/JIRA_assigned.csv')             
+JIRA_completed_init1 <- read_csv('data/JIRA_completed.csv')
 
 # O2D REPORT DATAFRAMES
-O2D_assigned <- read_csv('data/O2D_assigned.csv')
-O2D_completed <- read_csv('data/O2D_completed.csv')
-O2D_prev_mths <- read_csv('data/O2D_prev_mths.csv')
+O2D_assigned_init1 <- read_csv('data/O2D_assigned.csv')
+O2D_completed_init1 <- read_csv('data/O2D_completed.csv')
+O2D_prev_mths_init1 <- read_csv('data/O2D_prev_mths.csv')
 
 # JIRA & O2D DATA TIDY & TRANSFORM
 
-JIRA_open <- 
-  slice(JIRA_open, -1:-3, preserve = FALSE) %>% 
+JIRA_open_init1 <- 
+  slice(JIRA_open_init1, -1:-3, preserve = FALSE) %>% 
   select(-3) %>% 
   na.omit() # remove all rows containing 'NA'
 
-JIRA_completed <- 
-  slice(JIRA_completed, -1:-3, preserve = FALSE) %>% 
+JIRA_completed_init1 <- 
+  slice(JIRA_completed_init1, -1:-3, preserve = FALSE) %>% 
   select(-3, -10:-13) %>% 
   na.omit() # remove all rows containing 'NA'
 
-JIRA_open_count <- group_by(JIRA_open, class) %>% 
+JIRA_open_count <- group_by(JIRA_open_init1, type) %>% 
   summarise(count = n())
 
-JIRA_completed_count <- group_by(JIRA_completed, class) %>% 
+JIRA_completed_count <- group_by(JIRA_completed_init1, type) %>% 
   summarise(count = n())
 
 ## O2D DATA TIDY & TRANSFORM
 
 O2D_assigned_count <- 
-  rename(O2D_assigned, class = `Task Type`) %>% 
-  group_by(class) %>% 
+  rename(O2D_assigned_init1, type = `Task Type`) %>% 
+  group_by(type) %>% 
   summarise(count = n())
 
 O2D_completed_count <- 
-  rename(O2D_completed, class = `Task Type`) %>% 
-  group_by(class) %>% 
+  rename(O2D_completed_init1, type = `Task Type`) %>% 
+  group_by(type) %>% 
   summarise(count = n())
 
 O2D_prev_mths_count <- 
-  rename(O2D_prev_mths, class = `Task Type`) %>% 
-  group_by(class) %>% 
+  rename(O2D_prev_mths_init1, type = `Task Type`) %>% 
+  group_by(type) %>% 
   summarise(count = n())
 
 JIRA_open_count
@@ -93,9 +91,41 @@ O2D_assigned_count
 O2D_completed_count
 O2D_prev_mths_count
 
-# NEXT STAGE: JOIN TOGETHER CLASS FOR OPEN AND COMPLETED
+# JOINING TOGETHER JIRA TASKS
 
-JIRA_open_close <- filter(JIRA_open_count, class == "Close Project")
-JIRA_completed_close <- filter(JIRA_completed_count, class == "Close Project")
+JIRA_open <- JIRA_open_count %>% 
+  rename("open" = "count")
 
+JIRA_completed <- JIRA_completed_count %>% 
+  rename("completed" = "count")
 
+JIRA_all <- full_join(JIRA_open, JIRA_completed) %>% 
+  mutate(month = "Mar-20") %>% # set this to 'current month'
+  select(month, everything())
+
+JIRA_all
+
+# JOINING TOGETHER O2D TASKS FOR JOBS OPEN & COMPLETE
+
+O2D_open <- O2D_assigned_count %>% 
+  rename("open" = "count")
+
+O2D_completed <- O2D_completed_count %>% 
+  rename("completed" = "count")
+
+O2D_all <- full_join(O2D_open, O2D_completed) %>% 
+  mutate(month = "Mar-20") %>% # set this to 'current month'
+  select(month, everything())
+
+O2D_all
+
+sum(O2D_prev_mths_count$count) #calculate the sum total of outstanding jobs from previous month.
+
+?geom_bar
+
+# test ggplot
+
+ggplot(
+  data = O2D_all, aes(x = type, y = completed)) +
+  geom_col(aes(fill = completed), width = 0.1) +
+  geom_text(aes(y = completed, label = completed), colour = "black")
