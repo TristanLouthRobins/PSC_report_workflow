@@ -3,6 +3,13 @@ library(readxl)
 library(purrr)
 library(lubridate)
 
+## SET MONTH OF REPORT HERE ##
+
+current_month <- ymd("2020-03-31") %>% 
+  month(label = TRUE, abbr = TRUE, locale = Sys.getlocale("LC_COLLATE"))
+
+##############################
+
 # Cache CSV snapshot using readxl of raw datatables from PSC_JIRA and PSC_O2D report 
 # workbooks. 
 
@@ -114,18 +121,15 @@ O2D_completed <- O2D_completed_count %>%
   rename("completed" = "count")
 
 O2D_all <- full_join(O2D_open, O2D_completed) %>% 
-  mutate(month = "Mar-20") %>% # set this to 'current month'
+  mutate(month = current_month) %>% # set this to 'current month'
   select(month, everything())
 
 O2D_all
 
 sum(O2D_prev_mths_count$count) #calculate the sum total of outstanding jobs from previous month.
 
-?geom_bar
+# Testing month/year functions
 
-# test ggplot
 
-ggplot(
-  data = O2D_all, aes(x = type, y = completed)) +
-  geom_col(aes(fill = completed), width = 0.1) +
-  geom_text(aes(y = completed, label = completed), colour = "black")
+
+
