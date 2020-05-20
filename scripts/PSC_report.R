@@ -107,7 +107,7 @@ JIRA_completed <- JIRA_completed_count %>%
   rename("completed" = "count")
 
 JIRA_all <- full_join(JIRA_open, JIRA_completed) %>% 
-  mutate(month = "Mar-20") %>% # set this to 'current month'
+  mutate(month = current_month) %>% # set this to 'current month'
   select(month, everything())
 
 JIRA_all
@@ -128,8 +128,61 @@ O2D_all
 
 sum(O2D_prev_mths_count$count) #calculate the sum total of outstanding jobs from previous month.
 
-# Testing month/year functions
+####
+
+# REORG DATAFRAMES - * consider using functions for repetitive process
+
+JIRA_all
+
+JIRA_CP <- filter(JIRA_all, type == 'Close Project') %>% 
+  rename(CP_open = open, CP_comp = completed) %>% 
+  select(3:4)
+
+JIRA_GEN <- filter(JIRA_all, type == 'General') %>% 
+  rename(GEN_open = open, GEN_comp = completed) %>% 
+  select(3:4)
+
+JIRA_PC <- filter(JIRA_all, type == 'Partners Change') %>% 
+  rename(PC_open = open, PC_comp = completed) %>% 
+  select(3:4)
+
+JIRA_PLC <- filter(JIRA_all, type == 'Project Leader Change') %>% 
+  rename(PLC_open = open, PLC_comp = completed) %>% 
+  select(3:4)
+
+JIRA_PLDC <- filter(JIRA_all, type == 'Project Leader Delegation Check') %>% 
+  rename(PLDC_open = open, PLDC_comp = completed) %>% 
+  select(3:4)
+
+JIRA_PLDC <- filter(JIRA_all, type == 'Project Leader Delegation Check') %>% 
+  rename(PLDC_open = open, PLDC_comp = completed) %>% 
+  select(3:4)
+
+Reduce(merge, list(JIRA_CP, 
+                   JIRA_GEN, 
+                   JIRA_PC, 
+                   JIRA_PLC,
+                   JIRA_PLDC,
+                   JIRA_RRC)) %>%  # merges multiple data frames
+  mutate(month = current_month) %>% # set this to 'current month'
+  select(month, everything())
+       
+  
+############## ATTEMPTED FUNCTION TO SIMPLIFY ABOVE CODE
+
+merge_tasks <- function(df, task, abbr1, abbr2) {
+  merging <- filter(df, type == task) %>% 
+    rename(abbr1 = open, abbr2 = completed) %>% 
+    select(3:4)
+  
+  merging
+}
 
 
+JIRA_CP <-merge_tasks(JIRA_all, 'Close Project', CP_open, CP_closed)
+JIRA_GEN <- merge_tasks(JIRA_all, 'General', GEN_open, GEN_closed)
 
+JIRA_CP
+JIRA_GEN
 
+##############
