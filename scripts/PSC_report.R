@@ -3,7 +3,7 @@ library(readxl)
 library(purrr)
 library(lubridate)
 
-## SET MONTH OF REPORT HERE ##
+## SET MONTH OF REPORT HERE! ##
 
 current_month <- ymd("2020-03-31") %>% 
   month(label = TRUE, abbr = TRUE, locale = Sys.getlocale("LC_COLLATE"))
@@ -128,9 +128,25 @@ O2D_all
 
 sum(O2D_prev_mths_count$count) #calculate the sum total of outstanding jobs from previous month.
 
-####
-
 # REORG DATAFRAMES - * consider using functions for repetitive process
+
+############## TEST FUNCTION TO SIMPLIFY BELOW CODE
+
+merge_tasks <- function(df, task) {  
+  merging <- filter(df, type == task) %>%
+    select(3:4)
+  
+  merging
+}
+
+JIRA_close <- merge_tasks(JIRA_all, "Close Project") %>% 
+  rename(GEN_open = open, GEN_comp = completed)
+
+JIRA_close
+
+#############
+
+# JIRA MERGING #
 
 JIRA_all
 
@@ -154,35 +170,135 @@ JIRA_PLDC <- filter(JIRA_all, type == 'Project Leader Delegation Check') %>%
   rename(PLDC_open = open, PLDC_comp = completed) %>% 
   select(3:4)
 
-JIRA_PLDC <- filter(JIRA_all, type == 'Project Leader Delegation Check') %>% 
-  rename(PLDC_open = open, PLDC_comp = completed) %>% 
+JIRA_RRC <- filter(JIRA_all, type == 'Revenue Recognition Change') %>% 
+  rename(RRC_open = open, RRC_comp = completed) %>% 
   select(3:4)
 
-Reduce(merge, list(JIRA_CP, 
+JIRA_full <- Reduce(merge, list(JIRA_CP, # Reduce() and list() merges multiple data frames
                    JIRA_GEN, 
                    JIRA_PC, 
                    JIRA_PLC,
                    JIRA_PLDC,
-                   JIRA_RRC)) %>%  # merges multiple data frames
+                   JIRA_RRC)) %>%  
   mutate(month = current_month) %>% # set this to 'current month'
   select(month, everything())
-       
+
+view(JIRA_full)      
+
+# O2D MERGING #
+
+O2D_all
+view(O2D_all)
+
+O2D_BM_UPIT <- filter(O2D_all, type == 'Billing Milestone - Update Printed on Invoice Text') %>% 
+  rename(BM_UPIT_open = open, BM_UPIT_comp = completed) %>% 
+  select(3:4)
+
+O2D_CP <- filter(O2D_all, type == 'Close Project') %>% 
+  rename(CP_open = open, CP_comp = completed) %>% 
+  select(3:4)
+
+O2D_CWBS <- filter(O2D_all, type == 'Close WBS Stage') %>% 
+  rename(CWBS_open = open, CWBS_comp = completed) %>% 
+  select(3:4)
+
+O2D_GEN <- filter(O2D_all, type == 'General') %>% 
+  rename(GEN_open = open, GEN_comp = completed) %>% 
+  select(3:4)
+
+O2D_LEP <- filter(O2D_all, type == 'Link to Existing Project') %>% 
+  rename(LEP_open = open, LEP_comp = completed) %>% 
+  select(3:4)
+
+O2D_NCP <- filter(O2D_all, type == 'New Capital Project') %>% 
+  rename(NCP_open = open, NCP_comp = completed) %>% 
+  select(3:4)
+
+O2D_NRRPMP <- filter(O2D_all, type == 'New RR Progress Milestones Project') %>% 
+  rename(NRRPMP_open = open, NRRPMP_comp = completed) %>% 
+  select(3:4)
+
+O2D_RR_TPLP <- filter(O2D_all, type == 'New RR Time Proportional (Linear) Project') %>% 
+  rename(RR_TPLP_open = open, RR_TPLP_comp = completed) %>% 
+  select(3:4)
+
+O2D_RR_TPPP <- filter(O2D_all, type == 'New RR Time Proportional (Phase) Project') %>% 
+  rename(RR_TPPP_open = open, RR_TPPP_comp = completed) %>% 
+  select(3:4)
+
+O2D_NSP <- filter(O2D_all, type == 'New Support Project') %>% 
+  rename(NSP_open = open, NSP_comp = completed) %>% 
+  select(3:4)
+
+O2D_WBS_RRP <- filter(O2D_all, type == 'New WBS for RR Project') %>% 
+  rename(WBS_RRP_open = open, WBS_RRP_comp = completed) %>% 
+  select(3:4)
+
+O2D_PLDC_PEDC <- filter(O2D_all, type == 'PL Delegation Check for Project End Date Change') %>% 
+  rename(PLDC_PEDC_open = open, PLDC_PEDC_comp = completed) %>% 
+  select(3:4)
+
+O2D_PTC <- filter(O2D_all, type == 'Planning Tool Changes') %>% 
+  rename(PTC_open = open, PTC_comp = completed) %>% 
+  select(3:4)
+
+O2D_PED <- filter(O2D_all, type == 'Project End Date') %>% 
+  rename(PED_open = open, PED_comp = completed) %>% 
+  select(3:4)
+
+O2D_PLC <- filter(O2D_all, type == 'Project Leader Change') %>% 
+  rename(PLC_open = open, PLC_comp = completed) %>% 
+  select(3:4)
+
+O2D_PLDC <- filter(O2D_all, type == 'Project Leader Delegation Check') %>% 
+  rename(PLDC_open = open, PLDC_comp = completed) %>% 
+  select(3:4)
+
+O2D_RM_MC <- filter(O2D_all, type == 'Revenue Milestone - Milestone Completed') %>% 
+  rename(RM_MC_open = open, RM_MC_comp = completed) %>% 
+  select(3:4)
+
+O2D_RRC <- filter(O2D_all, type == 'Revenue Recognition Change') %>% 
+  rename(RRC_open = open, RRC_comp = completed) %>% 
+  select(3:4)
+
+O2D_RSDC <- filter(O2D_all, type == 'Review Stage Dates Changes') %>% 
+  rename(RSDC_open = open, RSDC_comp = completed) %>% 
+  select(3:4)
+
+O2D_NCSP <- filter(O2D_all, type == 'New Complex Structure Project') %>% 
+  rename(NCSP_open = open, NCSP_comp = completed) %>% 
+  select(3:4)
+
+O2D_NPC <- filter(O2D_all, type == 'New Project Created') %>% 
+  rename(NPC_open = open, NPC_comp = completed) %>% 
+  select(3:4)
+
+O2D_full <- Reduce(merge, list(O2D_BM_UPIT, # Reduce() and list() merges multiple data frames
+                               O2D_CP,
+                               O2D_CWBS, 
+                               O2D_GEN, 
+                               O2D_LEP, 
+                               O2D_NCP, 
+                               O2D_NRRPMP,
+                               O2D_RR_TPLP,
+                               O2D_RR_TPPP,
+                               O2D_NSP,
+                               O2D_WBS_RRP,
+                               O2D_PLDC_PEDC,
+                               O2D_PTC,
+                               O2D_PED,
+                               O2D_PLC,
+                               O2D_PLDC,
+                               O2D_RM_MC,
+                               O2D_RRC,
+                               O2D_RSDC,
+                               O2D_NCSP,
+                               O2D_NPC)) %>%  
+  mutate(month = current_month) %>% # set this to 'current month'
+  select(month, everything()) ### INCLUDE SOMETHING HERE TO REMOVE N/A's
+
+O2D_full
+view(O2D_full)   
   
-############## ATTEMPTED FUNCTION TO SIMPLIFY ABOVE CODE
 
-merge_tasks <- function(df, task, abbr1, abbr2) {
-  merging <- filter(df, type == task) %>% 
-    rename(abbr1 = open, abbr2 = completed) %>% 
-    select(3:4)
-  
-  merging
-}
-
-
-JIRA_CP <-merge_tasks(JIRA_all, 'Close Project', CP_open, CP_closed)
-JIRA_GEN <- merge_tasks(JIRA_all, 'General', GEN_open, GEN_closed)
-
-JIRA_CP
-JIRA_GEN
-
-##############
