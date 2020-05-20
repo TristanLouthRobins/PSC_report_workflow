@@ -180,60 +180,52 @@ JIRA_close
 JIRA_all
 
 JIRA_CP <- filter(JIRA_all, type == 'Close Project') %>% 
-  rename(CP_open = open, CP_comp = completed) %>% 
+  rename(JCP_open = open, JCP_comp = completed) %>% 
   select(3:4)
 
 JIRA_CWBS <- filter(JIRA_all, type == 'Close WBS Stage') %>% 
-  rename(CWBS_open = open, CWBS_comp = completed) %>% 
+  rename(JCWBS_open = open, JCWBS_comp = completed) %>% 
   select(3:4)
 
 JIRA_GEN <- filter(JIRA_all, type == 'General') %>% 
-  rename(GEN_open = open, GEN_comp = completed) %>% 
+  rename(JGEN_open = open, JGEN_comp = completed) %>% 
   select(3:4)
 
 JIRA_LEP <- filter(JIRA_all, type == 'Link To Existing Project') %>% 
-  rename(LEP_open = open, LEP_comp = completed) %>% 
+  rename(JLEP_open = open, JLEP_comp = completed) %>% 
   select(3:4)
 
 JIRA_NC_WBS_P <- filter(JIRA_all, type == 'New Capital (WBS) Project') %>% 
-  rename(NC_WBS_P_open = open, NC_WBS_P_comp = completed) %>% 
+  rename(JNC_WBS_P_open = open, JNC_WBS_P_comp = completed) %>% 
   select(3:4)
 
 JIRA_NS_WBS_P <- filter(JIRA_all, type == 'New Support (WBS) Project') %>% 
-  rename(NS_WBS_P_open = open, NS_WBS_P_comp = completed) %>% 
+  rename(JNS_WBS_P_open = open, JNS_WBS_P_comp = completed) %>% 
   select(3:4)
 
 JIRA_PC <- filter(JIRA_all, type == 'Partners Change') %>% 
-  rename(PC_open = open, PC_comp = completed) %>% 
+  rename(JPC_open = open, JPC_comp = completed) %>% 
   select(3:4)
 
 JIRA_PLC <- filter(JIRA_all, type == 'Project Leader Change') %>% 
-  rename(PLC_open = open, PLC_comp = completed) %>% 
+  rename(JPLC_open = open, JPLC_comp = completed) %>% 
   select(3:4)
 
 JIRA_PLDC <- filter(JIRA_all, type == 'Project Leader Delegation Check') %>% 
-  rename(PLDC_open = open, PLDC_comp = completed) %>% 
+  rename(JPLDC_open = open, JPLDC_comp = completed) %>% 
   select(3:4)
 
 JIRA_PTC <- filter(JIRA_all, type == 'Planning Tool Changes') %>% 
-  rename(PTC_open = open, PTC_comp = completed) %>% 
+  rename(JPTC_open = open, JPTC_comp = completed) %>% 
   select(3:4)
 
 JIRA_RRC <- filter(JIRA_all, type == 'Revenue Recognition Change') %>% 
-  rename(RRC_open = open, RRC_comp = completed) %>% 
+  rename(JRRC_open = open, JRRC_comp = completed) %>% 
   select(3:4)
 
-JIRA_full <- Reduce(merge, list(JIRA_CP,  # Reduce() and list() merges multiple data frames
-                                JIRA_CWBS,
-                                JIRA_GEN,
-                                JIRA_LEP,
-                                JIRA_NC_WBS_P,
-                                JIRA_NS_WBS_P,
-                                JIRA_PC,
-                                JIRA_PLC,
-                                JIRA_PLDC,
-                                JIRA_PTC,
-                                JIRA_RRC)) %>%  
+# Reduce() and list() merges multiple data frames
+JIRA_full <- Reduce(merge, list(JIRA_CP, JIRA_CWBS, JIRA_GEN, JIRA_LEP, JIRA_NC_WBS_P, JIRA_NS_WBS_P,
+                                JIRA_PC, JIRA_PLC, JIRA_PLDC, JIRA_PTC, JIRA_RRC)) %>%  
   mutate(month = current_month) %>% # set this to 'current month'
   select(month, everything())
 
@@ -248,7 +240,7 @@ view(O2D_all)
 
 O2D_BM_UPIT <- filter(O2D_all, type == 'Billing Milestone - Update Printed on Invoice Text') %>% 
   rename(BM_UPIT_open = open, BM_UPIT_comp = completed) %>% 
-  select(3:4)
+  select(3:4) 
 
 O2D_CP <- filter(O2D_all, type == 'Close Project') %>% 
   rename(CP_open = open, CP_comp = completed) %>% 
@@ -342,28 +334,11 @@ O2D_NPC <- filter(O2D_all, type == 'New Project Created') %>%
   rename(NPC_open = open, NPC_comp = completed) %>% 
   select(3:4)
 
-O2D_full <- Reduce(merge, list(O2D_BM_UPIT, # Reduce() and list() merges multiple data frames
-                               O2D_CP,
-                               O2D_CWBS, 
-                               O2D_GEN, 
-                               O2D_LEP, 
-                               O2D_NCP,
-                               O2D_NCSP,
-                               O2D_NPC,
-                               O2D_NRRPMP,
-                               O2D_RR_TPLP,
-                               O2D_RR_TPPP,
-                               O2D_NSP,
-                               O2D_WBS_RRP,
-                               O2D_PC,
-                               O2D_PLDC_PEDC,
-                               O2D_PTC,
-                               O2D_PED,
-                               O2D_PLC,
-                               O2D_PLDC,
-                               O2D_RM_MC,
-                               O2D_RRC,
-                               O2D_RSDC)) %>%  
+# Reduce() and list() merges multiple data frames
+O2D_full <- Reduce(merge, list(O2D_BM_UPIT, O2D_CP, O2D_CWBS, O2D_GEN, O2D_LEP, O2D_NCP, O2D_NCSP,
+                               O2D_NPC, O2D_NRRPMP, O2D_RR_TPLP, O2D_RR_TPPP, O2D_NSP, O2D_WBS_RRP,
+                               O2D_PC, O2D_PLDC_PEDC, O2D_PTC, O2D_PED, O2D_PLC, O2D_PLDC, O2D_RM_MC,
+                               O2D_RRC, O2D_RSDC)) %>%  
   mutate(month = current_month) %>% # set this to 'current month'
   select(month, everything())
 
@@ -413,11 +388,27 @@ O2D_full[is.na(O2D_full)] <- 0
 ##
 
 JIRA_full
-
 O2D_full
 
-monthly_summary <- 
-  mutate(PTC_Open = sum())
+## PLANNING TOOL CHANGES ##
+PTC_month <- Reduce(merge, list(O2D_PTC,
+                                O2D_RSDC,
+                                JIRA_PTC)) %>% 
+  mutate(MPTC_open = PTC_open + RSDC_open + JPTC_open) %>% 
+  mutate(MPTC_comp = PTC_comp + RSDC_comp + JPTC_comp) %>% 
+  select(MPTC_open, MPTC_comp)
 
+## NEW PROJECT CREATION ##
+NPC_month <- Reduce(merge, list(O2D_LEP,
+                                O2D_NPC,
+                                O2D_NCP,
+                                O2D_NCSP,
+                                O2D_NSP,
+                                O2D_WBS_RRP,
+                                JIRA_LEP,
+                                JIRA_NC_WBS_P,
+                                JIRA_NS_WBS_P)) 
+  mutate(MNPC_open = ) %>% 
+  mutate(MNPC_comp = ) %>% 
+  select(MNPC_open, MNPC_comp)
   
-
