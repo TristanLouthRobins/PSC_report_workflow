@@ -3,9 +3,9 @@ library(readxl)
 library(purrr)
 library(lubridate)
 
-## SET MONTH OF REPORT HERE! ##
+## BEFORE RUNNING SCRIPT, SET MONTH OF REPORT HERE! ##
 
-current_month <- ymd("2020-03-31") %>% 
+current_month <- ymd("2020-03-1") %>% 
   month(label = TRUE, abbr = TRUE, locale = Sys.getlocale("LC_COLLATE"))
 
 ##############################
@@ -96,6 +96,7 @@ O2D_tasklist <- read_csv("data/O2D_tasklist.csv") %>%
   select(1)
 
 #########################
+view(O2D_assigned_init1)
 
 O2D_assigned_count <- 
   rename(O2D_assigned_init1, type = `Task Type`) %>% 
@@ -203,7 +204,7 @@ JIRA_NS_WBS_P <- filter(JIRA_all, type == 'New Support (WBS) Project') %>%
   rename(JNS_WBS_P_open = open, JNS_WBS_P_comp = completed) %>% 
   select(3:4)
 
-JIRA_PC <- filter(JIRA_all, type == 'Partners Change') %>% 
+JIRA_PC <- filter(JIRA_all, type == 'Capital/Support Partners Change') %>% 
   rename(JPC_open = open, JPC_comp = completed) %>% 
   select(3:4)
 
@@ -239,7 +240,7 @@ JIRA_full
 
 # O2D MERGING #
 
-O2D_all
+view(O2D_all)
 
 O2D_BM_UPIT <- filter(O2D_all, type == 'Billing Milestone - Update Printed on Invoice Text') %>% 
   rename(BM_UPIT_open = open, BM_UPIT_comp = completed) %>% 
@@ -257,7 +258,7 @@ O2D_GEN <- filter(O2D_all, type == 'General') %>%
   rename(GEN_open = open, GEN_comp = completed) %>% 
   select(3:4)
 
-O2D_LEP <- filter(O2D_all, type == 'Link to Existing Project') %>% 
+O2D_LEP <- filter(O2D_all, type == 'Link To Existing Project') %>% 
   rename(LEP_open = open, LEP_comp = completed) %>% 
   select(3:4)
 
@@ -293,7 +294,7 @@ O2D_WBS_RRP <- filter(O2D_all, type == 'New WBS for RR Project') %>%
   rename(WBS_RRP_open = open, WBS_RRP_comp = completed) %>% 
   select(3:4)
 
-O2D_PC <- filter(O2D_all, type == 'Partners Change') %>% 
+O2D_PC <- filter(O2D_all, type == 'Capital/Support Partners Change') %>% 
   rename(PC_open = open, PC_comp = completed) %>% 
   select(3:4)
 
@@ -343,7 +344,7 @@ O2D_full <- Reduce(merge, list(O2D_BM_UPIT, O2D_CP, O2D_CWBS, O2D_GEN, O2D_LEP, 
                                O2D_PC, O2D_PLDC_PEDC, O2D_PTC, O2D_PED, O2D_PLC, O2D_PLDC, O2D_RM_MC,
                                O2D_RRC, O2D_RSDC)) %>%  
   mutate(month = current_month) %>% # set this to 'current month'
-  select(month, everything())
+  select(month, everything()) # position new column in first position 
 
 O2D_full[is.na(O2D_full)] <- 0
 
@@ -371,9 +372,9 @@ NPC_month <- Reduce(merge, list(O2D_LEP, O2D_NPC, O2D_NCP, O2D_NCSP, O2D_NSP, O2
 PLA_month <- Reduce(merge, list(O2D_PLC, O2D_PLDC, O2D_PLDC_PEDC, O2D_PC, 
                                 JIRA_PLC, JIRA_PLDC, JIRA_PC)) %>% 
   mutate(MPLA_open = PLC_open + PLDC_open + PLDC_PEDC_open + PC_open + 
-         JPLC_open + JPLDC_open + JPC_open) %>% 
+         JPLDC_open + JPC_open) %>% 
   mutate(MPLA_comp = PLC_comp + PLDC_comp + PLDC_PEDC_comp + PC_comp + 
-           JPLC_comp + JPLDC_comp + JPC_comp) %>% 
+          JPLDC_comp + JPC_comp) %>% 
   select(MPLA_open, MPLA_comp)
 
 ###### NEED TO IDENTIFY WHERE CA-TASKS DATA COMES FROM FOR ADDITIONAL GENERAL JOBS COUNT!
@@ -410,6 +411,30 @@ PDC_month <- Reduce(merge, list(O2D_PED, JIRA_PED)) %>%
 TCT_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_RR_month, CPS_month, PDC_month)) %>% 
   mutate(TCT_open = MPTC_open + MNPC_open + MPLA_open + MOT_open + MBPM_RR_open + MCPS_open + MPDC_open) %>% 
   mutate(TCT_comp = MPTC_comp + MNPC_comp + MPLA_comp + MOT_comp + MBPM_RR_comp + MCPS_comp + MPDC_comp) %>% 
-  select(TCT_open, TCT_comp)
+  mutate(TCT_perc = TCT_comp / TCT_open) %>% 
+  select(TCT_open, TCT_comp, TCT_perc)
+
+## FULL MONTHLY SUMMARY ##
+
+full_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_RR_month, 
+                                 CPS_month, PDC_month, TCT_month)) %>% 
+  mutate(month = current_month) %>% # set this to 'current month'
+  select(month, everything()) %>% 
+write_csv("data/outputs/full_month3.csv")
   
+view(full_month)
+
+summary7 <- read_csv("data/outputs/full_month7.csv")
+summary8 <- read_csv("data/outputs/full_month8.csv")
+summary9 <- read_csv("data/outputs/full_month9.csv")
+summary10 <- read_csv("data/outputs/full_month10.csv")
+summary11 <- read_csv("data/outputs/full_month11.csv")
+summary12 <- read_csv("data/outputs/full_month12.csv")
+
+graph1 <-  bind_rows(summary7, summary8, summary9, summary10, summary11, summary12)
+
+graph1
+
+ggplot(data = graph1) +
+  geom_point(mapping = aes(x = month, y = MPLA_open))
 
