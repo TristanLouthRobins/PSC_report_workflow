@@ -207,8 +207,12 @@ JIRA_PC <- filter(JIRA_all, type == 'Partners Change') %>%
   rename(JPC_open = open, JPC_comp = completed) %>% 
   select(3:4)
 
+JIRA_PED <- filter(JIRA_all, type == 'Project End Date') %>% 
+  rename(JPED_open = open, JPED_comp = completed) %>% 
+  select(3:4)
+
 JIRA_PLC <- filter(JIRA_all, type == 'Project Leader Change') %>% 
-  rename(JPLC_open = open, JPLC_comp = completed) %>% 
+  rename(JPED_open = open, JPED_comp = completed) %>% 
   select(3:4)
 
 JIRA_PLDC <- filter(JIRA_all, type == 'Project Leader Delegation Check') %>% 
@@ -236,7 +240,6 @@ JIRA_full
 # O2D MERGING #
 
 O2D_all
-view(O2D_all)
 
 O2D_BM_UPIT <- filter(O2D_all, type == 'Billing Milestone - Update Printed on Invoice Text') %>% 
   rename(BM_UPIT_open = open, BM_UPIT_comp = completed) %>% 
@@ -344,49 +347,6 @@ O2D_full <- Reduce(merge, list(O2D_BM_UPIT, O2D_CP, O2D_CWBS, O2D_GEN, O2D_LEP, 
 
 O2D_full[is.na(O2D_full)] <- 0
 
-### O2D AND JIRA MERGE FOR MONTHLY SUMMARY ###
-
-# Key for abbreviations and incorporated JIRA & O2D dataframes #
-
-# PTC    - PLANNING TOOL CHANGES
-## O2D_PTC, O2D_RSDC
-## JIRA_PTC 
-
-# NPC    - NEW PROJECT CREATION
-## O2D_LEP, O2D_NPC, O2D_NCP, O2D_NCSP, O2D_NSP, O2D_WBS_RRP
-## JIRA_LEP, JIRA_NC_WBS_P, JIRA_NS_WBS_P
-
-# PLA    - PROJECT LEADER AUTHORISATIONS & CHANGES
-## O2D_PLC, O2D_PLDC, O2D_PCDC_PEDC, O2D_PC*
-## JIRA_PLDC, JIRA_PC
-
-# OT     - OTHER TASKS
-## O2D_GEN
-## JIRA_GEN
-
-# BPM_RR - BILLING & PROGRESS MS; REVENUE RECOGNITION
-## O2D_RRC, O2D_RR_TPLP, O2D_RM_MC, O2D_NRRPMP, O2D_RR_TPPP, O2D_BM_UPIT
-## JIRA_RRC
-
-# CPS    - CLOSE PROJECT/STAGE
-## O2D_CP, O2D_CWBS
-## JIRA_CP, JIRA_CWBS
-
-# PDC    - PROJECT DATE CHANGES
-## O2D_PED
-## JIRA_PED
-
-# TCT    - TOTAL COMPLETED TASKS (AND %) open, completed, % completed
-## SUM OF PTC, NPC, PLA, OT, BPM_RR, CPS, PDC
-
-# TC     - TASKS CREATED
-## TCT Open tasks
-
-# TIPV   - TASKS INCOMPLETE FROM PREVIOUS MONTH
-## ALL_TIPV
-
-##
-
 JIRA_full
 O2D_full
 
@@ -399,16 +359,57 @@ PTC_month <- Reduce(merge, list(O2D_PTC,
   select(MPTC_open, MPTC_comp)
 
 ## NEW PROJECT CREATION ##
-NPC_month <- Reduce(merge, list(O2D_LEP,
-                                O2D_NPC,
-                                O2D_NCP,
-                                O2D_NCSP,
-                                O2D_NSP,
-                                O2D_WBS_RRP,
-                                JIRA_LEP,
-                                JIRA_NC_WBS_P,
-                                JIRA_NS_WBS_P)) 
-  mutate(MNPC_open = ) %>% 
-  mutate(MNPC_comp = ) %>% 
+NPC_month <- Reduce(merge, list(O2D_LEP, O2D_NPC, O2D_NCP, O2D_NCSP, O2D_NSP, O2D_WBS_RRP,
+                                JIRA_LEP,JIRA_NC_WBS_P)) %>% 
+  mutate(MNPC_open = LEP_open + NPC_open + NCP_open + NCSP_open + NSP_open + WBS_RRP_open +
+           JLEP_open + JNC_WBS_P_open) %>% 
+  mutate(MNPC_comp = LEP_comp + NPC_comp + NCP_comp + NCSP_comp + NSP_comp + WBS_RRP_comp +
+           JLEP_comp + JNC_WBS_P_comp) %>% 
   select(MNPC_open, MNPC_comp)
+
+## PROJECT LEADER AUTHORISATIONS & CHANGES ##
+PLA_month <- Reduce(merge, list(O2D_PLC, O2D_PLDC, O2D_PLDC_PEDC, O2D_PC, 
+                                JIRA_PLC, JIRA_PLDC, JIRA_PC)) %>% 
+  mutate(MPLA_open = PLC_open + PLDC_open + PLDC_PEDC_open + PC_open + 
+         JPLC_open + JPLDC_open + JPC_open) %>% 
+  mutate(MPLA_comp = PLC_comp + PLDC_comp + PLDC_PEDC_comp + PC_comp + 
+           JPLC_comp + JPLDC_comp + JPC_comp) %>% 
+  select(MPLA_open, MPLA_comp)
+
+###### NEED TO IDENTIFY WHERE CA-TASKS DATA COMES FROM FOR ADDITIONAL GENERAL JOBS COUNT!
+######
+
+## OTHER TASKS ## 
+OT_month <- Reduce(merge, list(O2D_GEN, JIRA_GEN)) %>% 
+  mutate(MOT_open = GEN_open + JGEN_open) %>% 
+    mutate(MOT_comp = GEN_comp + JGEN_comp) %>% 
+    select(MOT_open, MOT_comp)
   
+## BILLING & PROGRESS MS; REVENUE RECOGNITION ##
+BPM_RR_month <- Reduce(merge, list(O2D_RRC, O2D_RR_TPLP, O2D_RM_MC, O2D_NRRPMP, O2D_RR_TPPP, O2D_BM_UPIT, 
+                                   JIRA_RRC)) %>% 
+  mutate(MBPM_RR_open = RRC_open + RR_TPLP_open + RM_MC_open + NRRPMP_open + RR_TPPP_open + BM_UPIT_open +
+           JRRC_open) %>% 
+  mutate(MBPM_RR_comp = RRC_comp + RR_TPLP_comp + RM_MC_comp + NRRPMP_comp + RR_TPPP_comp + BM_UPIT_comp +
+           JRRC_comp) %>% 
+  select(MBPM_RR_open, MBPM_RR_comp)
+
+## CLOSE PROJECT/STAGE ##
+CPS_month <- Reduce(merge, list(O2D_CP, O2D_CWBS, JIRA_CP, JIRA_CWBS)) %>% 
+  mutate(MCPS_open = CP_open + CWBS_open + JCP_open + JCWBS_open) %>% 
+    mutate(MCPS_comp = CP_comp + CWBS_comp + JCP_comp + JCWBS_comp) %>% 
+    select(MCPS_open, MCPS_comp)
+  
+## PROJECT DATE CHANGES ##
+PDC_month <- Reduce(merge, list(O2D_PED, JIRA_PED)) %>% 
+  mutate(MPDC_open = PED_open + JPED_open) %>% 
+  mutate(MPDC_comp = PED_comp + JPED_comp) %>% 
+  select(MPDC_open, MPDC_comp)
+
+## TOTAL COMPLETED TASKS ## 
+TCT_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_RR_month, CPS_month, PDC_month)) %>% 
+  mutate(TCT_open = MPTC_open + MNPC_open + MPLA_open + MOT_open + MBPM_RR_open + MCPS_open + MPDC_open) %>% 
+  mutate(TCT_comp = MPTC_comp + MNPC_comp + MPLA_comp + MOT_comp + MBPM_RR_comp + MCPS_comp + MPDC_comp) %>% 
+  select(TCT_open, TCT_comp)
+  
+
