@@ -5,8 +5,14 @@ library(lubridate)
 
 ## BEFORE RUNNING SCRIPT, SET MONTH OF REPORT HERE! ##
 
-current_month <- ymd("2020-03-1") %>% 
-  month(label = TRUE, abbr = TRUE, locale = Sys.getlocale("LC_COLLATE"))
+current_month <- mdy("03-01-2020")
+
+
+
+report_month <- date %>% 
+  month(label = TRUE, abbr = TRUE, locale = Sys.getlocale("LC_COLLATE")) 
+
+report_year <- year(date)
 
 ##############################
 
@@ -17,13 +23,13 @@ current_month <- ymd("2020-03-1") %>%
 # JIRA REPORT READ AND CONVERSION TO CSV
 # note: requires additional code to deal with absence of conventional Headers in spreadsheet
 
-JIRA_assigned_import <- read_excel("data/PSC_JIRA_Mar20.xlsm", 
+JIRA_assigned_import <- read_excel("data/PSC_JIRA_0920.xlsm", 
                             sheet = "Created",
                             col_names = c("type", "issue", "key_ident", "issue_id", "summary", "stat", "resolution", "created", "resolved", "reporter", "assignee", "misc"),
                             col_type = c("text", "text", "numeric", "numeric", "text", "text", "text", "date", "date", "text", "text", "text")) %>% 
   write_csv("data/JIRA_assigned.csv")
 
-JIRA_completed_import <- read_excel("data/PSC_JIRA_Mar20.xlsm", 
+JIRA_completed_import <- read_excel("data/PSC_JIRA_0920.xlsm", 
                              sheet = "Completed",
                              col_names = c("type", "issue", "key_ident", "issue_id", "summary", "stat", "resolution", "created", "resolved", "reporter", "assignee", "misc", "misc"),
                              col_type = c("text", "text", "numeric", "numeric", "text", "text", "text", "date", "date", "text", "text", "text", "text")) %>% 
@@ -32,17 +38,17 @@ JIRA_completed_import <- read_excel("data/PSC_JIRA_Mar20.xlsm",
 
 # O2D REPORT READ AND CONVERSION TO CSV
 
-O2D_assigned_import <- read_excel("data/PSC_O2D_Mar20.xlsm",  #Q: possible to find/replace filenames, i.e. latest version?
+O2D_assigned_import <- read_excel("data/PSC_O2D_0920.xlsm",  #Q: possible to find/replace filenames, i.e. latest version?
                           sheet = "Assigned", 
                           col_names = TRUE) %>%  
   write_csv("data/O2D_assigned.csv")
 
-O2D_completed_import <- read_excel("data/PSC_O2D_Mar20.xlsm",
+O2D_completed_import <- read_excel("data/PSC_O2D_0920.xlsm",
                            sheet = "Completed", 
                            col_names = TRUE) %>%  
   write_csv("data/O2D_completed.csv")
 
-O2D_prev_month_import <- read_excel("data/PSC_O2D_Mar20.xlsm",
+O2D_prev_month_import <- read_excel("data/PSC_O2D_0920.xlsm",
                              sheet = "Open from previous mths") %>% 
   write_csv("data/O2D_prev_mths.csv")
 
@@ -419,11 +425,17 @@ TCT_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_R
 full_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_RR_month, 
                                  CPS_month, PDC_month, TCT_month)) %>% 
   mutate(month = current_month) %>% # set this to 'current month'
-  select(month, everything()) %>% 
-write_csv("data/outputs/full_month3.csv")
+  select(month, everything()) 
+
   
 view(full_month)
 
+summary1 <- read_csv("data/outputs/full_month1.csv")
+summary2 <- read_csv("data/outputs/full_month2.csv")
+summary3 <- read_csv("data/outputs/full_month3.csv")
+summary4 <- read_csv("data/outputs/full_month4.csv")
+summary5 <- read_csv("data/outputs/full_month5.csv")
+summary6 <- read_csv("data/outputs/full_month6.csv")
 summary7 <- read_csv("data/outputs/full_month7.csv")
 summary8 <- read_csv("data/outputs/full_month8.csv")
 summary9 <- read_csv("data/outputs/full_month9.csv")
@@ -431,10 +443,31 @@ summary10 <- read_csv("data/outputs/full_month10.csv")
 summary11 <- read_csv("data/outputs/full_month11.csv")
 summary12 <- read_csv("data/outputs/full_month12.csv")
 
-graph1 <-  bind_rows(summary7, summary8, summary9, summary10, summary11, summary12)
+graph1 <- bind_rows(summary1, summary2, summary3, summary4, summary5, summary6, summary7, summary8, summary9, summary10, summary11, summary12) %>% 
+  write_csv("data/outputs/final.csv")
 
-graph1
+final <- read_csv("data/outputs/final.csv")
 
-ggplot(data = graph1) +
-  geom_point(mapping = aes(x = month, y = MPLA_open))
+view(final)
+
+facetopen <-  
+  select(final, -3,-5,-7,-9,-11,-13,-15,-16:-18) %>% 
+  gather(2:8 , key = 'Task', value = 'n') %>% 
+  
+  mutate(Status = "open")
+
+facetclosed <- 
+  select(final, -2,-4,-6,-8,-10,-12,-14,-16:-18) %>% 
+  gather(2:8 , key = 'Task', value = 'n') %>% 
+  mutate(Status = "completed")
+
+facet <- full_join(facetopen, facetclosed)
+
+view(facet)  
+
+facet %>% 
+ggplot(aes(x = month, y = n, fill = Task)) +
+  geom_col() +
+  scale_colour_brewer(palette = "Pastel1") +
+  facet_wrap(~Status)
 
