@@ -1,5 +1,7 @@
 library(tidyverse)
 library(readxl)
+library(gganimate)
+library(gifski)
 library(purrr)
 library(lubridate)
 
@@ -440,13 +442,13 @@ summary10 <- read_csv("data/outputs/full_month10.csv")
 summary11 <- read_csv("data/outputs/full_month11.csv")
 summary12 <- read_csv("data/outputs/full_month12.csv")
 
-graph1 <- bind_rows(summary1, summary2, summary3, summary4, summary5, summary6, summary7, summary8, summary9, summary10, summary11, summary12) %>% 
+PSC_bind <- bind_rows(summary1, summary2, summary3, summary4, summary5, summary6, summary7, summary8, summary9, summary10, summary11, summary12) %>% 
   write_csv("data/outputs/final.csv")
 
-final <- read_csv("data/outputs/final.csv")
+PSC_bind <- read_csv("data/outputs/final.csv")
 
 
-facetopen <-  
+PSC_open <-  
   select(final, -3,-5,-7,-9,-11,-13,-15,-16:-18) %>% 
   rename("Planning Tool Changes" = MPTC_open, 
          "New Project Created" = MNPC_open,
@@ -458,7 +460,7 @@ facetopen <-
   gather(2:8 , key = 'Task', value = 'n') %>% 
   mutate(Status = "open")
 
-facetclosed <- 
+PSC_comp <- 
   select(final, -2,-4,-6,-8,-10,-12,-14,-16:-18) %>% 
   rename("Planning Tool Changes" = MPTC_comp, 
          "New Project Created" = MNPC_comp,
@@ -470,13 +472,53 @@ facetclosed <-
   gather(2:8 , key = 'Task', value = 'n') %>% 
   mutate(Status = "completed")
 
-facet <- full_join(facetopen, facetclosed)
+PSC_complete <- full_join(final_open, final_closed)
 
-view(facet)  
 
-facet %>% 
+# Static facetwrap() plot displaying open and closed tasks.
+PSC_complete %>% 
 ggplot(aes(x = month, y = n, fill = Task)) +
   geom_col() +
   scale_colour_brewer(palette = "Pastel1") +
   facet_wrap(~Status)
+
+# Animated month-by-month summary of open and closed tasks.
+PSC_anim_tasks <- 
+PSC_complete %>% 
+ggplot(aes(x = Status, y = n, fill = Task)) +
+  geom_col() +
+  labs (x = "Status",
+        y = "Count") +
+  transition_time(month) +
+  labs(title = "Month: {frame_time}") +
+  ease_aes("cubic-in-out")
+
+PSC_anim_tasks <- animate(PSC_anim_tasks, nframes = 100, fps = 10, height = 400, width = 200, res = 50)
+
+PSC_anim_tasks
+
+# Animated transition of month of open and closed tasks.
+facetopen %>% 
+  ggplot(aes(x = month, y = n, fill = Task)) +
+  geom_col(width = 90) +
+  labs (x = "month",
+        y = "Count") +
+  transition_time(month) +
+  labs(title = "Month: {frame_time}") +
+  ease_aes("cubic-in-out") 
+
+
+task_line <- 
+  ggplot(facetopen, aes(x = month, y = n, colour = Task)) +
+  geom_line() +
+  labs (x = "month",
+        y = "Count") +
+  transition_reveal(month) 
+  ease_aes("cubic-in-out") 
+
+  
+
+
+  
+
 
