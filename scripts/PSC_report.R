@@ -5,14 +5,7 @@ library(lubridate)
 
 ## BEFORE RUNNING SCRIPT, SET MONTH OF REPORT HERE! ##
 
-current_month <- mdy("03-01-2020")
-
-
-
-report_month <- date %>% 
-  month(label = TRUE, abbr = TRUE, locale = Sys.getlocale("LC_COLLATE")) 
-
-report_year <- year(date)
+current_month <- mdy("04-01-2020")
 
 ##############################
 
@@ -23,32 +16,33 @@ report_year <- year(date)
 # JIRA REPORT READ AND CONVERSION TO CSV
 # note: requires additional code to deal with absence of conventional Headers in spreadsheet
 
-JIRA_assigned_import <- read_excel("data/PSC_JIRA_0920.xlsm", 
+JIRA_assigned_import <- read_excel("data/JIRA_10_19-20.xlsm", 
                             sheet = "Created",
                             col_names = c("type", "issue", "key_ident", "issue_id", "summary", "stat", "resolution", "created", "resolved", "reporter", "assignee", "misc"),
                             col_type = c("text", "text", "numeric", "numeric", "text", "text", "text", "date", "date", "text", "text", "text")) %>% 
   write_csv("data/JIRA_assigned.csv")
 
-JIRA_completed_import <- read_excel("data/PSC_JIRA_0920.xlsm", 
+JIRA_completed_import <- read_excel("data/JIRA_10_19-20.xlsm", 
                              sheet = "Completed",
                              col_names = c("type", "issue", "key_ident", "issue_id", "summary", "stat", "resolution", "created", "resolved", "reporter", "assignee", "misc", "misc"),
                              col_type = c("text", "text", "numeric", "numeric", "text", "text", "text", "date", "date", "text", "text", "text", "text")) %>% 
   write_csv("data/JIRA_completed.csv")
 
+JIRA_Project_WBS <- read_csv("data/JIRA_PWBS_10_19_20.csv")
 
 # O2D REPORT READ AND CONVERSION TO CSV
 
-O2D_assigned_import <- read_excel("data/PSC_O2D_0920.xlsm",  #Q: possible to find/replace filenames, i.e. latest version?
+O2D_assigned_import <- read_excel("data/O2D_10_19-20.xlsm",  #Q: possible to find/replace filenames, i.e. latest version?
                           sheet = "Assigned", 
                           col_names = TRUE) %>%  
   write_csv("data/O2D_assigned.csv")
 
-O2D_completed_import <- read_excel("data/PSC_O2D_0920.xlsm",
+O2D_completed_import <- read_excel("data/O2D_10_19-20.xlsm",
                            sheet = "Completed", 
                            col_names = TRUE) %>%  
   write_csv("data/O2D_completed.csv")
 
-O2D_prev_month_import <- read_excel("data/PSC_O2D_0920.xlsm",
+O2D_prev_month_import <- read_excel("data/O2D_10_19-20.xlsm",
                              sheet = "Open from previous mths") %>% 
   write_csv("data/O2D_prev_mths.csv")
 
@@ -142,6 +136,8 @@ JIRA_open <- JIRA_open_count %>%
 JIRA_completed <- JIRA_completed_count %>% 
   rename("completed" = "count")
 
+JIRA_projectWBS <- 
+
 JIRA_all <- full_join(JIRA_open, JIRA_completed) %>% 
   mutate(month = current_month) %>% # set this to 'current month'
   select(month, everything())
@@ -197,6 +193,8 @@ JIRA_CWBS <- filter(JIRA_all, type == 'Close WBS Stage') %>%
 JIRA_GEN <- filter(JIRA_all, type == 'General') %>% 
   rename(JGEN_open = open, JGEN_comp = completed) %>% 
   select(3:4)
+
+JIRA_PWBS <- JIRA_Project_WBS
 
 JIRA_LEP <- filter(JIRA_all, type == 'Link To Existing Project') %>% 
   rename(JLEP_open = open, JLEP_comp = completed) %>% 
@@ -383,13 +381,11 @@ PLA_month <- Reduce(merge, list(O2D_PLC, O2D_PLDC, O2D_PLDC_PEDC, O2D_PC,
           JPLDC_comp + JPC_comp) %>% 
   select(MPLA_open, MPLA_comp)
 
-###### NEED TO IDENTIFY WHERE CA-TASKS DATA COMES FROM FOR ADDITIONAL GENERAL JOBS COUNT!
-######
+## OTHER TASKS ##
 
-## OTHER TASKS ## 
-OT_month <- Reduce(merge, list(O2D_GEN, JIRA_GEN)) %>% 
-  mutate(MOT_open = GEN_open + JGEN_open) %>% 
-    mutate(MOT_comp = GEN_comp + JGEN_comp) %>% 
+OT_month <- Reduce(merge, list(O2D_GEN, JIRA_GEN, JIRA_PWBS)) %>% 
+  mutate(MOT_open = GEN_open + JGEN_open + PWBS_open) %>% 
+    mutate(MOT_comp = GEN_comp + JGEN_comp + PWBS_comp) %>% 
     select(MOT_open, MOT_comp)
   
 ## BILLING & PROGRESS MS; REVENUE RECOGNITION ##
@@ -425,7 +421,8 @@ TCT_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_R
 full_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_RR_month, 
                                  CPS_month, PDC_month, TCT_month)) %>% 
   mutate(month = current_month) %>% # set this to 'current month'
-  select(month, everything()) 
+  select(month, everything()) %>% 
+  write_csv("data/outputs/full_month10.csv")
 
   
 view(full_month)
@@ -448,16 +445,28 @@ graph1 <- bind_rows(summary1, summary2, summary3, summary4, summary5, summary6, 
 
 final <- read_csv("data/outputs/final.csv")
 
-view(final)
 
 facetopen <-  
   select(final, -3,-5,-7,-9,-11,-13,-15,-16:-18) %>% 
+  rename("Planning Tool Changes" = MPTC_open, 
+         "New Project Created" = MNPC_open,
+         "Project Leader Authorisation" = MPLA_open,
+         "Other Tasks" = MOT_open,
+         "Billing & Progress MS; Revenue Recognition" = MBPM_RR_open,
+         "Close Project/Stage" = MCPS_open,
+         "Project Date Changes" = MPDC_open) %>% 
   gather(2:8 , key = 'Task', value = 'n') %>% 
-  
   mutate(Status = "open")
 
 facetclosed <- 
   select(final, -2,-4,-6,-8,-10,-12,-14,-16:-18) %>% 
+  rename("Planning Tool Changes" = MPTC_comp, 
+         "New Project Created" = MNPC_comp,
+         "Project Leader Authorisation" = MPLA_comp,
+         "Other Tasks" = MOT_comp,
+         "Billing & Progress MS; Revenue Recognition" = MBPM_RR_comp,
+         "Close Project/Stage" = MCPS_comp,
+         "Project Date Changes" = MPDC_comp) %>% 
   gather(2:8 , key = 'Task', value = 'n') %>% 
   mutate(Status = "completed")
 
