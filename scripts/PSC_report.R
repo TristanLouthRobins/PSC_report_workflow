@@ -599,7 +599,7 @@ PSC_opencomp_anim
 PSC_open_anim <- 
   PSC_open +
   transition_time(month) +
-  labs(title = "Open PSC tasks: 2019-20 FY") +
+  labs(title = "Open PSC tasks: 2019-20 FY (up to Apr-20)") +
   shadow_mark(0.2) +
   ease_aes("cubic-in-out")
 

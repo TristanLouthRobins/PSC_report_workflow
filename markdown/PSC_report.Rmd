@@ -1,7 +1,7 @@
 ---
 title: Project Support Centre Monthly Reporting
 subtitle: Streamlining report generation using R workflows
-short_title: (optional short title) # Delete if not required
+short_title: Project Support Centre Monthly Reporting
 
 author:  Tristan Louth-Robins
 affiliation: CSIRO Finance 
@@ -144,7 +144,7 @@ PSC_open <- PSC_open_gathered %>%
   geom_col() +
   scale_fill_brewer(palette = "Paired") +
   labs(
-    title = "Open PSC tasks: 2019-20 FY",
+    title = "Open PSC tasks: 2019-20 FY (up to Apr-20)",
     x = "Month",
     y = "Count",
     colour = "Task"
@@ -163,13 +163,15 @@ PSC_open
 
 ```
 
-The following chart is an animation detailing the Open PSC Tasks from month-to-month over the 2019-20 FY.
+Here's an animation of the above chart. I think the animated aspect lends greater insight into the work volume over the course of the year and indicates particular trends.
 
-![](resources/img/PSC_open.gif){width=650px}
+This animation incorporates transition_time() and shadow_mark() functions, whilst an ease_aes() function smooths the transitions. The timing of the animation is controlled further by rendering the animation using the animate() function.
 
-Whilst this animation details both Open and Completed PSC Tasks from month-to-month over the 2019-20 FY.
+![](resources/img/PSC_open.gif){height=400px, width=800px}
 
-![](resources/img/PSC_combined.gif){width=650px}
+Whilst this animation details both Open and Completed PSC Tasks from month-to-month over the 2019-20 FY. I'm not entirely sure how informative it is at this stage. However, it could definitely be improved by fixing the date stamp and replacing this with the name of the month instead.
+
+![](resources/img/PSC_combined.gif){height=500px, width=500px}
 
 
 ///////////////////////////////////////////////////
