@@ -1,7 +1,7 @@
 ---
 title: Project Support Centre Monthly Reporting
 subtitle: Streamlining report generation using R workflows
-short_title: Project Support Centre Monthly Reporting
+short_title: PSC Reporting
 
 author:  Tristan Louth-Robins
 affiliation: CSIRO Finance 
@@ -30,21 +30,24 @@ library(kableExtra)
 
 
 # Introduction
-Introduce *yourself*. What's your background? Could you code before Data School? What did your 
-daily work pattern look like before Data School? Etc. This section will be placed in 
-an introductory block at the top of the page separate from the rest of the content. Don't change the section title from "Introduction" otherwise this process won't work correctly.
+I joined CSIRO in 2009 and worked in the Contract Administration Office until 2014. Since then, I've covered a variety of roles supporting Project Support, In-Business Finance, Research Office and currently the Project Support Centre (Corporate Finance.) Prior to commencing Data School I could code in HTML and a bit of C, but its applications were largely restricted to extra-curricular activities away from CSIRO. Learning R and aspect of Data Management appealed to me as an attractive and valuable skill that could be applied in practice for the purposes of reporting, file management systems and general compliance requirements.
 
 # My Project
-Rather than yourself, this is the space to introduce your **project**. What are 
-your goals, what is your data, how do you plan to work with it? Perhaps show some example data if 
-it would help.
+
+This project could be best regarded as an attempt to replicate a process that is currently handled manually which consists of two primary components: 1) data import, wrangling and tidying; 2) visualisation and communication. This process is part of preparing the Project Support Centre (PSC) monthly report, which informs part of the wider Finance Support Centre reporting.
+
+One of the identified issues with preparation of the PSC report is that it is currently a manual process and is time-consuming and potentially prone to data duplication and human errors. 
+
+
 
 In order to build this demo poster correctly, you will also need to have installed the `tidyverse`, 
 `gapminder`, and `kableExtra` packages.
 
 **TEXT HERE DETAILING BACKGROUND OF PROJECT, ISSUES WITH MANUAL PROCESS, DUPLICATION/HUMAN ERROR ETC. text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text**
 
-** !! Include an image of what the report looked like on the original spreadsheet**
+** !! Include an image of what the report looked like on the original spreadsheet, maybe include a screengrab of what the raw data looked like too. **
+
+** A snippet of the Miro process mapping might be good.**
 
 ![](resources/img/tidyverse.png){width=100px}
 
