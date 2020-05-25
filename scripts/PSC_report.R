@@ -2,6 +2,7 @@ library(tidyverse)
 library(readxl)
 library(gganimate)
 library(gifski)
+library(gridExtra)
 library(purrr)
 library(lubridate)
 
@@ -423,8 +424,10 @@ TCT_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_R
 full_month <- Reduce(merge, list(PTC_month, NPC_month, PLA_month, OT_month, BPM_RR_month, 
                                  CPS_month, PDC_month, TCT_month)) %>% 
   mutate(month = current_month) %>% # set this to 'current month'
-  select(month, everything()) %>% 
-  write_csv("data/outputs/full_month10.csv")
+  select(month, everything())
+
+
+write_csv("data/outputs/full_month10.csv")
 
   
 view(full_month)
@@ -447,9 +450,10 @@ PSC_bind <- bind_rows(summary1, summary2, summary3, summary4, summary5, summary6
 
 PSC_bind <- read_csv("data/outputs/final.csv")
 
+## GATHERED DATA FOR PLOTTING CHARTS ##
 
-PSC_open <-  
-  select(final, -3,-5,-7,-9,-11,-13,-15,-16:-18) %>% 
+PSC_open_gathered <-  
+  select(PSC_bind, -3,-5,-7,-9,-11,-13,-15,-16:-18) %>% 
   rename("Planning Tool Changes" = MPTC_open, 
          "New Project Created" = MNPC_open,
          "Project Leader Authorisation" = MPLA_open,
@@ -460,8 +464,8 @@ PSC_open <-
   gather(2:8 , key = 'Task', value = 'n') %>% 
   mutate(Status = "open")
 
-PSC_comp <- 
-  select(final, -2,-4,-6,-8,-10,-12,-14,-16:-18) %>% 
+PSC_comp_gathered <- 
+  select(PSC_bind, -2,-4,-6,-8,-10,-12,-14,-16:-18) %>% 
   rename("Planning Tool Changes" = MPTC_comp, 
          "New Project Created" = MNPC_comp,
          "Project Leader Authorisation" = MPLA_comp,
@@ -469,52 +473,139 @@ PSC_comp <-
          "Billing & Progress MS; Revenue Recognition" = MBPM_RR_comp,
          "Close Project/Stage" = MCPS_comp,
          "Project Date Changes" = MPDC_comp) %>% 
-  gather(2:8 , key = 'Task', value = 'n') %>% 
+  gather(2:8, key = 'Task', value = 'n') %>% 
   mutate(Status = "completed")
 
-PSC_complete <- full_join(final_open, final_closed)
+PSC_complete_gathered <- full_join(PSC_open_gathered, PSC_comp_gathered)
 
+## LONG DATA FOR PLOTTING TABLES ##
+
+PSC_open_long <-  
+  select(PSC_bind, -3,-5,-7,-9,-11,-13,-15,-16:-18) %>% 
+  rename("Planning Tool Changes" = MPTC_open, 
+         "New Project Created" = MNPC_open,
+         "Project Leader Authorisation" = MPLA_open,
+         "Other Tasks" = MOT_open,
+         "Billing & Progress MS; Revenue Recognition" = MBPM_RR_open,
+         "Close Project/Stage" = MCPS_open,
+         "Project Date Changes" = MPDC_open) %>% 
+  gather(2:8, key = 'Task', value = 'n') %>% 
+  spread(1, key = 'month', value = 'n') %>% 
+  arrange(Task) %>% 
+  rename(" " = Task,
+         "Jul" = `2019-07-01`,
+         "Aug" = `2019-08-01`,
+         "Sep" = `2019-09-01`,
+         "Oct" = `2019-10-01`,
+         "Nov" = `2019-11-01`,
+         "Dec" = `2019-12-01`,
+         "Jan" = `2020-01-01`,
+         "Feb" = `2020-02-01`,
+         "Mar" = `2020-03-01`,
+         "Apr" = `2020-04-01`,
+         "May" = `2020-05-01`,
+         "Jun" = `2020-06-01`)
+
+## PLOTTING CODE BELOW ##
 
 # Static facetwrap() plot displaying open and closed tasks.
-PSC_complete %>% 
+
+PSC_open_and_comp <- PSC_complete_gathered %>% 
 ggplot(aes(x = month, y = n, fill = Task)) +
   geom_col() +
-  scale_colour_brewer(palette = "Pastel1") +
-  facet_wrap(~Status)
+  scale_fill_brewer(palette = "Paired") +
+  facet_wrap(~Status) +
+  labs(
+    title = "Open & Completed PSC tasks: 2019-20 FY",
+    x = "Month",
+    y = "Count",
+    colour = "Task"
+  ) + 
+  theme_bw() +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  ) 
+
+PSC_open_and_comp
+
+# Static plot displaying only open tasks.
+
+PSC_open <- PSC_open_gathered %>% 
+  ggplot(aes(x = month, y = n, fill = Task)) +
+  geom_col() +
+  scale_fill_brewer(palette = "Paired") +
+  facet_wrap(~Status) +
+  labs(
+    title = "Open PSC tasks: 2019-20 FY",
+    x = "Month",
+    y = "Count",
+    colour = "Task"
+  ) + 
+  theme_bw() +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  ) 
+
+PSC_open
+
+# Static table detailing open PSC tasks.
+
+tt_custom <- ttheme_minimal(
+  core=list(bg_params = list(fill = c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f"), col = NA),
+            fg_params=list(fontsize = 10, fontface = 1)),
+  colhead=list(fg_params=list(col = "black", fontsize = 10, fontface = 2)),
+  rowhead=list(fg_params=list(col = "black", fontsize = 10, fontface = 2)))
+
+grid.table(PSC_open_long, theme = tt_custom)
+
 
 # Animated month-by-month summary of open and closed tasks.
-PSC_anim_tasks <- 
-PSC_complete %>% 
-ggplot(aes(x = Status, y = n, fill = Task)) +
+
+# Below code substitutes 'month' for 'status' at x axis, facet_wrap() removed. 
+PSC_open_and_comp_status <- PSC_complete_gathered %>% 
+  ggplot(aes(x = Status, y = n, fill = Task)) +
   geom_col() +
-  labs (x = "Status",
-        y = "Count") +
+  scale_fill_brewer(palette = "Paired") +
+  labs(
+    title = "Open & Completed PSC tasks: 2019-20 FY",
+    x = "Month",
+    y = "Count",
+    colour = "Task"
+  ) + 
+  theme_bw() +
+  theme(
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(face = "bold")
+  ) 
+
+PSC_opencomp_anim <- 
+  PSC_open_and_comp_status +
   transition_time(month) +
   labs(title = "Month: {frame_time}") +
   ease_aes("cubic-in-out")
 
-PSC_anim_tasks <- animate(PSC_anim_tasks, nframes = 100, fps = 10, height = 400, width = 200, res = 50)
+PSC_opencomp_anim
 
-PSC_anim_tasks
 
-# Animated transition of month of open and closed tasks.
-facetopen %>% 
-  ggplot(aes(x = month, y = n, fill = Task)) +
-  geom_col(width = 90) +
-  labs (x = "month",
-        y = "Count") +
+# Animated month-by-month summary of open tasks only.
+# This incorporates the shadow_mark() function to leave the previous month visible.
+
+PSC_open_anim <- 
+  PSC_open +
   transition_time(month) +
   labs(title = "Month: {frame_time}") +
-  ease_aes("cubic-in-out") 
+  shadow_mark(0.2) +
+  ease_aes("cubic-in-out")
+
+PSC_open_anim
+  
+  
 
 
-task_line <- 
-  ggplot(facetopen, aes(x = month, y = n, colour = Task)) +
-  geom_line() +
-  labs (x = "month",
-        y = "Count") +
-  transition_reveal(month) 
-  ease_aes("cubic-in-out") 
+
+ 
 
   
 
