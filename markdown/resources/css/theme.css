@@ -1,0 +1,103 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+}
+
+.navbar {
+ background-color: #001D34;
+ color: #00A9CE;
+ display: none;
+}
+
+.navbar-default .navbar-text {
+  color: inherit;
+}
+
+#header-container {
+  background-color: #001D34;
+  color: #FFF;
+}
+
+.photo {
+  float: left;
+  margin-right: 2%;
+  height: 90px;
+  width: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.introduction {
+  font-size: 16pt;
+  color: #757579;
+}
+
+h1 {
+  color: #00A9CE ;
+}
+
+
+h2 {
+  color: #001D34;
+}
+
+.title {
+  color: #00A9CE;
+}
+
+.subtitle {
+  color: white;
+}
+
+.table th {
+  background-color: #001D34 ;
+  color: #ffffff;
+}
+
+.table-striped tr:nth-child(odd) {
+  background-color: #E9E9E9;
+}
+
+caption {
+  color: black;
+  font-size: 90%;
+}
+
+.caption {
+  color: black;
+  font-size: 90%;
+}
+
+/* unvisited link */
+a:link {
+color: #001D34;
+}
+
+/* visited link */
+a:visited {
+color: #001D34;
+}
+
+/* mouse over link */
+a:hover {
+color: #00A9CE;
+}
+
+/* selected link */
+a:active {
+color: #001D34;
+}
+
+code {
+  background-color: #00A9CE24;
+  color: #001D34;
+}
+
+#author {
+  color: white;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+  z-index: 0;
+}

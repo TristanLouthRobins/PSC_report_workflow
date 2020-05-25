@@ -476,7 +476,7 @@ PSC_comp_gathered <-
   gather(2:8, key = 'Task', value = 'n') %>% 
   mutate(Status = "completed")
 
-PSC_complete_gathered <- full_join(PSC_open_gathered, PSC_comp_gathered)
+PSC_combined <- full_join(PSC_open_gathered, PSC_comp_gathered)
 
 ## LONG DATA FOR PLOTTING TABLES ##
 
@@ -510,7 +510,7 @@ PSC_open_long <-
 
 # Static facetwrap() plot displaying open and closed tasks.
 
-PSC_open_and_comp <- PSC_complete_gathered %>% 
+PSC_open_and_comp <- PSC_combined %>% 
 ggplot(aes(x = month, y = n, fill = Task)) +
   geom_col() +
   scale_fill_brewer(palette = "Paired") +
@@ -535,7 +535,6 @@ PSC_open <- PSC_open_gathered %>%
   ggplot(aes(x = month, y = n, fill = Task)) +
   geom_col() +
   scale_fill_brewer(palette = "Paired") +
-  facet_wrap(~Status) +
   labs(
     title = "Open PSC tasks: 2019-20 FY",
     x = "Month",
@@ -545,12 +544,15 @@ PSC_open <- PSC_open_gathered %>%
   theme_bw() +
   theme(
     panel.grid.minor = element_blank(),
-    plot.title = element_text(face = "bold")
+    plot.title = element_text(face = "bold") 
   ) 
+
+PSC_open <- PSC_open +
+  theme(axis.text.x = element_text(angle = 50, size = 10, vjust = 0.5))
 
 PSC_open
 
-# Static table detailing open PSC tasks.
+# Experimental table detailing open PSC tasks (not being used in Markdown.)
 
 tt_custom <- ttheme_minimal(
   core=list(bg_params = list(fill = c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99", "#e31a1c", "#fdbf6f"), col = NA),
@@ -564,13 +566,13 @@ grid.table(PSC_open_long, theme = tt_custom)
 # Animated month-by-month summary of open and closed tasks.
 
 # Below code substitutes 'month' for 'status' at x axis, facet_wrap() removed. 
-PSC_open_and_comp_status <- PSC_complete_gathered %>% 
+PSC_open_and_comp_status <- PSC_combined %>% 
   ggplot(aes(x = Status, y = n, fill = Task)) +
   geom_col() +
   scale_fill_brewer(palette = "Paired") +
   labs(
     title = "Open & Completed PSC tasks: 2019-20 FY",
-    x = "Month",
+    x = " ",
     y = "Count",
     colour = "Task"
   ) + 
@@ -583,8 +585,10 @@ PSC_open_and_comp_status <- PSC_complete_gathered %>%
 PSC_opencomp_anim <- 
   PSC_open_and_comp_status +
   transition_time(month) +
-  labs(title = "Month: {frame_time}") +
+  labs(title = "2019-20 FY: {frame_time}") +
   ease_aes("cubic-in-out")
+
+PSC_opencomp_anim <- animate(PSC_opencomp_anim, nframes = 80, fps = 5, height = 500, width = 500, res = 75)
 
 PSC_opencomp_anim
 
@@ -595,15 +599,13 @@ PSC_opencomp_anim
 PSC_open_anim <- 
   PSC_open +
   transition_time(month) +
-  labs(title = "Month: {frame_time}") +
+  labs(title = "Open PSC tasks: 2019-20 FY") +
   shadow_mark(0.2) +
   ease_aes("cubic-in-out")
 
+PSC_open_anim <- animate(PSC_open_anim, nframes = 80, fps = 5, height = 300, width = 600, res = 75)
+
 PSC_open_anim
-  
-  
-
-
 
  
 

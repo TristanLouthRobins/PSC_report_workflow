@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Tristan Louth-Robins" />
+
+
+<title>Project Support Centre Monthly Reporting</title>
+
+<script src="PSC_report_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="PSC_report_files/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="PSC_report_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="PSC_report_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="PSC_report_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="PSC_report_files/navigation-1.1/tabsets.js"></script>
+<script src="PSC_report_files/kePrint-0.0.1/kePrint.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+<link rel="stylesheet" href="resources/css/theme.css">
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" id="menu">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <p class="navbar-text">(optional short title)</p>
+      <p class="navbar-text" id="author">Tristan Louth-Robins</p>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid" id="header-container">
+  <div class="container-fluid main-container">
+    <h1 class="title toc-ignore">Project Support Centre Monthly Reporting</h1>
+
+        <h2 class="subtitle">Streamlining report generation using R workflows</h2>
+    
+    <h3 class="author">Tristan Louth-Robins</h3>
+    <h4 class="affiliation">CSIRO Finance</h4>
+  </div>
+</div>
+
+
+<div class="container-fluid main-container">
+<div id="new_intro" class="introduction">
+  <img class='photo' src="resources/img/TLR.jpeg">
+</div>
+
+
+
+<div class="fluid-row" id="header">
+
+
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Introduce <em>yourself</em>. What’s your background? Could you code before Data School? What did your daily work pattern look like before Data School? Etc. This section will be placed in an introductory block at the top of the page separate from the rest of the content. Don’t change the section title from “Introduction” otherwise this process won’t work correctly.</p>
+</div>
+<div id="my-project" class="section level1">
+<h1>My Project</h1>
+<p>Rather than yourself, this is the space to introduce your <strong>project</strong>. What are your goals, what is your data, how do you plan to work with it? Perhaps show some example data if it would help.</p>
+<p>In order to build this demo poster correctly, you will also need to have installed the <code>tidyverse</code>, <code>gapminder</code>, and <code>kableExtra</code> packages.</p>
+<p><strong>TEXT HERE DETAILING BACKGROUND OF PROJECT, ISSUES WITH MANUAL PROCESS, DUPLICATION/HUMAN ERROR ETC. text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text</strong></p>
+<p>** !! Include an image of what the report looked like on the original spreadsheet**</p>
+<div class="figure">
+<img src="resources/img/tidyverse.png" width="100" />
+
+</div>
+<div id="preliminary-results" class="section level2">
+<h2>Preliminary results</h2>
+<p>This section will demonstrate the different visuals you might want use to show off your project. Don’t feel the need to go overboard, this is supposed to give a taste of the work you are doing rather than being a publication ready document.</p>
+<p>To get tables formatting correctly, use <code>knitr::kable</code> to convert the table to html format. If you also want to have alternate row highlighting, pass the result to <code>kable_styling('striped')</code> from the <code>kableExtra</code> package.</p>
+<p>** This is a test version of a table generated from data **</p>
+<p><code>{(Code text here)}</code></p>
+<table class="table table-striped" style="margin-left: auto; margin-right: auto;">
+<caption>
+<span id="tab:unnamed-chunk-1">Table 1: </span>Open PSC tasks: 2019-20 FY
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+2019-20 FY
+</th>
+<th style="text-align:right;">
+Jul
+</th>
+<th style="text-align:right;">
+Aug
+</th>
+<th style="text-align:right;">
+Sep
+</th>
+<th style="text-align:right;">
+Oct
+</th>
+<th style="text-align:right;">
+Nov
+</th>
+<th style="text-align:right;">
+Dec
+</th>
+<th style="text-align:right;">
+Jan
+</th>
+<th style="text-align:right;">
+Feb
+</th>
+<th style="text-align:right;">
+Mar
+</th>
+<th style="text-align:right;">
+Apr
+</th>
+<th style="text-align:right;">
+May
+</th>
+<th style="text-align:right;">
+Jun
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Billing &amp; Progress MS; Revenue Recognition
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+137
+</td>
+<td style="text-align:right;">
+156
+</td>
+<td style="text-align:right;">
+124
+</td>
+<td style="text-align:right;">
+163
+</td>
+<td style="text-align:right;">
+144
+</td>
+<td style="text-align:right;">
+140
+</td>
+<td style="text-align:right;">
+108
+</td>
+<td style="text-align:right;">
+195
+</td>
+<td style="text-align:right;">
+256
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Close Project/Stage
+</td>
+<td style="text-align:right;">
+589
+</td>
+<td style="text-align:right;">
+247
+</td>
+<td style="text-align:right;">
+197
+</td>
+<td style="text-align:right;">
+179
+</td>
+<td style="text-align:right;">
+184
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+135
+</td>
+<td style="text-align:right;">
+130
+</td>
+<td style="text-align:right;">
+141
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+New Project Created
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+33
+</td>
+<td style="text-align:right;">
+46
+</td>
+<td style="text-align:right;">
+28
+</td>
+<td style="text-align:right;">
+57
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Other Tasks
+</td>
+<td style="text-align:right;">
+175
+</td>
+<td style="text-align:right;">
+120
+</td>
+<td style="text-align:right;">
+119
+</td>
+<td style="text-align:right;">
+93
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:right;">
+82
+</td>
+<td style="text-align:right;">
+71
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+115
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Planning Tool Changes
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+80
+</td>
+<td style="text-align:right;">
+53
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+40
+</td>
+<td style="text-align:right;">
+55
+</td>
+<td style="text-align:right;">
+50
+</td>
+<td style="text-align:right;">
+52
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Project Date Changes
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+29
+</td>
+<td style="text-align:right;">
+35
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Project Leader Authorisation
+</td>
+<td style="text-align:right;">
+292
+</td>
+<td style="text-align:right;">
+276
+</td>
+<td style="text-align:right;">
+251
+</td>
+<td style="text-align:right;">
+229
+</td>
+<td style="text-align:right;">
+250
+</td>
+<td style="text-align:right;">
+224
+</td>
+<td style="text-align:right;">
+271
+</td>
+<td style="text-align:right;">
+190
+</td>
+<td style="text-align:right;">
+273
+</td>
+<td style="text-align:right;">
+412
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Acutal text to follow: below is a chart detailing Open PSC tasks for FY 2019-20. text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text</strong></p>
+<div class="figure" style="text-align: left"><span id="fig:standard-plot"></span>
+<img src="PSC_report_files/figure-html/standard-plot-1.png" alt="Open PSC tasks: 2019-20 FY" width="80%" />
+<p class="caption">
+Figure 1: Open PSC tasks: 2019-20 FY
+</p>
+</div>
+<p>The following chart is an animation detailing the Open PSC Tasks from month-to-month over the 2019-20 FY.</p>
+<div class="figure">
+<img src="resources/img/PSC_open.gif" width="650" />
+
+</div>
+<p>Whilst this animation details both Open and Completed PSC Tasks from month-to-month over the 2019-20 FY.</p>
+<div class="figure">
+<img src="resources/img/PSC_combined.gif" width="650" />
+
+</div>
+<p>///////////////////////////////////////////////////</p>
+<p>Your figure and table captions are automatically numbered and can be referenced in the text if needed: see eg. Table <a href="#tab:mytable"><strong>??</strong></a> and Figure <a href="#fig:standard-plot">1</a></p>
+</div>
+</div>
+<div id="my-digital-toolbox" class="section level1">
+<h1>My Digital Toolbox</h1>
+<p>What digital tools have you been using in your project? Do you expect that everything will be able to be completed within R, or will you need to work with multiple tools to get the right result? Which of the digital skills needed for your project have you learned since starting Data School?</p>
+<p>You can use all the usual R markdown features in writing a project summary, including lists:</p>
+<ul>
+<li>R - dplyr, ggplot, …</li>
+<li>Python</li>
+<li>SQL</li>
+</ul>
+<div id="favourite-tool-optional" class="section level2">
+<h2>Favourite tool (optional)</h2>
+<p>Is there a tool/package/function in particular that you’ve enjoyed using? Give it a special shout out here. What about this tool makes it your favourite?</p>
+<div class="figure">
+<img src="https://raw.githubusercontent.com/tidyverse/ggplot2/master/man/figures/logo.png" class="pull-right" width="100" />
+
+</div>
+<p>No prizes for guessing mine:</p>
+</div>
+</div>
+<div id="my-time-went" class="section level1">
+<h1>My time went …</h1>
+<p>What parts of your project take the most time and effort? Were there any surprising challenges you encountered, and how did you solve them?</p>
+</div>
+<div id="next-steps" class="section level1">
+<h1>Next steps</h1>
+<p>What further steps do you wish your project could take? Or are there any new digital skills that you are keen to develop as a result of your involvement in the Data School?</p>
+</div>
+<div id="my-data-school-experience" class="section level1">
+<h1>My Data School Experience</h1>
+<p>This summary is mostly about your project. However we would also like to hear about other parts of your Data School experience. What aspects of the program did you really enjoy? Have you tried applying the skills you have learned in your daily work? Have you been able to transfer this knowledge to your team members? Any descriptions of the personal impact the program has had are welcome here as well!</p>
+</div>
+<div id="thank-you" class="section level1">
+<h1>Thank you:</h1>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script type="text/javascript" src="resources/js/theme.js"></script>
+<script type="text/javascript" src="resources/js/move_sections.js"></script>
+
+</body>
+</html>
