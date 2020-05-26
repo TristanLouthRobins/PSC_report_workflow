@@ -168,7 +168,7 @@ summary {
   <div class="container-fluid main-container">
     <h1 class="title toc-ignore">Project Support Centre Monthly Reporting (Draft)</h1>
 
-        <h2 class="subtitle">Streamlining report generation using R workflows</h2>
+        <h2 class="subtitle">Streamlining report creation using R workflows</h2>
     
     <h3 class="author">Tristan Louth-Robins</h3>
     <h4 class="affiliation">CSIRO Finance</h4>
@@ -198,15 +198,15 @@ summary {
 <h1>My Project</h1>
 <div id="from-manual-input-to-r-workflow" class="section level4">
 <h4>From manual input to R workflow</h4>
-<p>This project could be best regarded as an attempt to replicate a process that is currently handled manually which consists of two primary components: 1) data import, wrangling and tidying; 2) visualisation and communication.</p>
+<p>This project could be best regarded as an attempt to replicate a process that is currently handled manually and consists of two primary components: 1) data import, wrangling and tidying; 2) visualisation and communication.</p>
 </div>
 <div id="the-psc-monthly-report" class="section level4">
 <h4>The PSC Monthly report</h4>
-<p>This process is part of preparing data the Project Support Centre (PSC) monthly report. The PSC monthly summary reports on the status of tasks recorded across JIRA and O2D, and these inform part of the larger Finance Support Centre reporting at month’s end.</p>
+<p>This process is part of preparing data the Project Support Centre (PSC) monthly report. The PSC monthly summary reports on the status of open and completed tasks, recorded across JIRA and O2D. These statuses inform part of the larger Finance Support Centre reporting at month’s end.</p>
 </div>
 <div id="issues-with-the-manual-process" class="section level4">
 <h4>Issues with the manual process</h4>
-<p>One of the identified issues with preparation of the PSC report is that it is currently a manual process and is time-consuming and potentially prone to data duplication and human errors.</p>
+<p>One of the present issues with preparation of the PSC report is that it is currently a manual process and is both time-consuming and potentially prone to data duplication and human errors. Therefore, I felt that R could have the potential to efficiently wrangle, tidy and tranform JIRA and O2D data, resulting in accurate reporting data.</p>
 </div>
 <div id="the-r-workflow-replicating-a-manual-process-in-excel" class="section level4">
 <h4>The R workflow: replicating a manual process in Excel</h4>
@@ -214,16 +214,17 @@ summary {
 </div>
 <div id="wrangling-tidying-transforming" class="section level4">
 <h4>Wrangling, tidying, transforming</h4>
-<p>The goal of the main R workflow was to wrangle large chunks of data - extracted from JIRA nad O2D - and transform this into concise summaries of open and completed JIRA and O2D tasks for each month. From here, the summaries are brought together and comprise a complete summary of the Financial Year-To-Date. For the purposes of the PSC report, only the open statuses need to be reported upon.</p>
+<p>The goal of the main R workflow was to wrangle large chunks of data - extracted from JIRA nad O2D - and transform this into concise summaries of open and completed JIRA and O2D tasks for each month. From here, the summaries are brought together with previous month data and comprise a complete summary of the Financial Year-To-Date. For the purposes of the PSC report, only the open statuses need to be reported upon.</p>
 </div>
 <div id="preliminary-results" class="section level2">
 <h2>Preliminary results</h2>
-<p>This section will demonstrate visualisations.</p>
-<div id="visualisation-of-reporting-data" class="section level4">
-<h4>Visualisation of reporting data</h4>
+<div id="visualisation-of-data" class="section level4">
+<h4>Visualisation of data</h4>
+<p>The following table and plot are the key components of the PSC Monthly Report, and form the basis of its presentation.</p>
+<p>To present this data in Markdown, I have utilised internal R Markdown code to read in the data summary generated from my R workflow, assigned new variables and used these as datatables for table and plots details open PSC tasks across the 2019-20 FY.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-1">Table 1: </span>Open PSC tasks: 2019-20 FY (up to Apr-20
+<span id="tab:unnamed-chunk-1">Table 1: </span>
 </caption>
 <thead>
 <tr>
@@ -558,14 +559,12 @@ Project Leader Authorisation
 </tr>
 </tbody>
 </table>
-<p><strong>text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text</strong></p>
 <div class="figure" style="text-align: left"><span id="fig:standard-plot"></span>
-<img src="PSC_report_files/figure-html/standard-plot-1.png" alt="Open PSC tasks: 2019-20 FY (up to Apr-20" width="80%" />
+<img src="PSC_report_files/figure-html/standard-plot-1.png" alt="Table summary of open PSC tasks for 2019-20 FY (up to April 2020)" width="80%" />
 <p class="caption">
-Figure 1: Open PSC tasks: 2019-20 FY (up to Apr-20
+Figure 1: Table summary of open PSC tasks for 2019-20 FY (up to April 2020)
 </p>
 </div>
-<p>The table and plot detailed above are the key elements incorporated into the PSC Report. In addition to replicating this …. I thought I would see how some of these visualisations could be represented as animations ….</p>
 </div>
 <div id="animation-of-plots" class="section level4">
 <h4>Animation of plots</h4>
@@ -592,23 +591,18 @@ Figure 1: Open PSC tasks: 2019-20 FY (up to Apr-20
 <li>Python</li>
 <li>SQL</li>
 </ul>
-<div id="favourite-tool-tbc" class="section level2">
-<h2>Favourite tool (TBC)</h2>
-<p>Is there a tool/package/function in particular that you’ve enjoyed using? Give it a special shout out here. What about this tool makes it your favourite?</p>
-<div class="figure">
-<img src="https://raw.githubusercontent.com/tidyverse/ggplot2/master/man/figures/logo.png" class="pull-right" width="100" />
-
-</div>
-<p>No prizes for guessing mine:</p>
-</div>
 </div>
 <div id="my-time-went" class="section level1">
 <h1>My time went …</h1>
-<p>What parts of your project take the most time and effort? Were there any surprising challenges you encountered, and how did you solve them?</p>
+<p>The most labour-intensive aspect of this project involved analysing the current (manual) report process and transposing this into an R workflow.</p>
+<p>Because so much of the manual process involves hands-on copying/pasting, substituting of fields, filtering, creating pivot table summaries and so forth, the major challenge was identifying the best approach in R, using the experience I’d gained to date.</p>
+<p>At times this process was incredibly frustrating, though I found that most of the issues could be overcome by taking a step back and thinking about a particular part of the process in the simplest possible way. Asking lots of questions helped as well! When worst came to worst, I’d simpley get a large sheet of paper out and draw out the process for the upteenth time. Once I was immersed back in the code, tried and true functions such as <code>filter()</code>, <code>split()</code>, <code>select()</code>, <code>mutate()</code>, <code>rename()</code>, <code>group_by()</code> and <code>summarise()</code> were indispensable.</p>
 </div>
 <div id="next-steps" class="section level1">
 <h1>Next steps</h1>
-<p>What further steps do you wish your project could take? Or are there any new digital skills that you are keen to develop as a result of your involvement in the Data School?</p>
+<p>Although I managed to get the project up to the point where the workflow process executed perfectly (and accurately!), I would have really liked to reduce the volume of code in my script and find more efficient ways of performing certain functions. Duplication was an ongoing concern, and particular care needed to be taken to avoid errors.</p>
+<p>Looking ahead, I like to spend more time creating my own functions to avoid duplicated code as well as exploring Regular Expressions, strings and interation in greater detail. Above all, spending more time with the general theory of R is of great interest to me, insofar that I recently purchase the R For Data Science book for my iPad!</p>
+<p>Beyond R itself, becoming accustomed with other principles of Data Science and Data Management during this course has been enormously beneficial and I imagine that this will have valuable applications for myself and the rest of my Team in Finance.</p>
 </div>
 <div id="my-data-school-experience" class="section level1">
 <h1>My Data School Experience</h1>
@@ -616,6 +610,7 @@ Figure 1: Open PSC tasks: 2019-20 FY (up to Apr-20
 </div>
 <div id="thank-you" class="section level1">
 <h1>Thank you:</h1>
+<p>Stephen, Kerensa, Kristian, Helpers, Dan Nguyen […]</p>
 </div>
 
 

@@ -1,6 +1,6 @@
 ---
 title: Project Support Centre Monthly Reporting (Draft)
-subtitle: Streamlining report generation using R workflows
+subtitle: Streamlining report creation using R workflows
 short_title: PSC Reporting
 
 author:  Tristan Louth-Robins
@@ -36,17 +36,17 @@ I joined CSIRO in 2009 and worked in the Contract Administration Centre until 20
 
 #### From manual input to R workflow
 
-This project could be best regarded as an attempt to replicate a process that is currently handled manually which consists of two primary components: 1) data import, wrangling and tidying; 2) visualisation and communication. 
+This project could be best regarded as an attempt to replicate a process that is currently handled manually and consists of two primary components: 1) data import, wrangling and tidying; 2) visualisation and communication. 
 
 
 #### The PSC Monthly report
 
-This process is part of preparing data the Project Support Centre (PSC) monthly report. The PSC monthly summary reports on the status of tasks recorded across JIRA and O2D, and these inform part of the larger Finance Support Centre reporting at month's end.
+This process is part of preparing data the Project Support Centre (PSC) monthly report. The PSC monthly summary reports on the status of open and completed tasks, recorded across JIRA and O2D. These statuses inform part of the larger Finance Support Centre reporting at month's end.
 
 
 #### Issues with the manual process
 
-One of the identified issues with preparation of the PSC report is that it is currently a manual process and is time-consuming and potentially prone to data duplication and human errors. 
+One of the present issues with preparation of the PSC report is that it is currently a manual process and is both time-consuming and potentially prone to data duplication and human errors. Therefore, I felt that R could have the potential to efficiently wrangle, tidy and tranform JIRA and O2D data, resulting in accurate reporting data.
 
 
 #### The R workflow: replicating a manual process in Excel
@@ -55,18 +55,15 @@ In order to take this manual process and realise it as an R workflow, I would ne
 
 #### Wrangling, tidying, transforming
 
-The goal of the main R workflow was to wrangle large chunks of data - extracted from JIRA nad O2D - and transform this into concise summaries of open and completed JIRA and O2D tasks for each month. From here, the summaries are brought together and comprise a complete summary of the Financial Year-To-Date. For the purposes of the PSC report, only the open statuses need to be reported upon.
+The goal of the main R workflow was to wrangle large chunks of data - extracted from JIRA nad O2D - and transform this into concise summaries of open and completed JIRA and O2D tasks for each month. From here, the summaries are brought together with previous month data and comprise a complete summary of the Financial Year-To-Date. For the purposes of the PSC report, only the open statuses need to be reported upon.
 
 ## Preliminary results
 
-This section will demonstrate visualisations.
+#### Visualisation of data
 
+The following table and plot are the key components of the PSC Monthly Report, and form the basis of its presentation. 
 
-#### Visualisation of reporting data
-
-**text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text**
-
-The table and plot detailed above are the key elements incorporated into the PSC Report. In addition to replicating this .... I thought I would see how some of these visualisations could be represented as animations ....
+To present this data in Markdown, I have utilised internal R Markdown code to read in the data summary generated from my R workflow, assigned new variables and used these as datatables for table and plots details open PSC tasks across the 2019-20 FY.
 
 
 ```{r}
@@ -133,13 +130,13 @@ PSC_open_long <-
 
 # generate a table of Open PSC Tasks based on the long data tibble.
 
-knitr::kable(head(PSC_open_long, n = 7), format = "html", caption = "Open PSC tasks: 2019-20 FY (up to Apr-20") %>% 
+knitr::kable(head(PSC_open_long, n = 7), format = "html", caption = " ") %>% 
   kable_styling("striped")
 
 ```
 
 
-```{r standard-plot, out.width='80%', fig.align='left', fig.height= 4, fig.width=8, fig.cap="Open PSC tasks: 2019-20 FY (up to Apr-20"}
+```{r standard-plot, out.width='80%', fig.align='left', fig.height= 4, fig.width=8, fig.cap="Table summary of open PSC tasks for 2019-20 FY (up to April 2020)"}
 
 PSC_open <- PSC_open_gathered %>% 
   ggplot(aes(x = month, y = n, fill = Task)) +
@@ -190,25 +187,26 @@ You can use all the usual R markdown features in writing a project summary, incl
 * Python
 * SQL
 
-## Favourite tool (TBC)
-
-Is there a tool/package/function in particular that you've enjoyed using? Give it a special shout out here. What about this tool makes it your favourite?
-
-![](https://raw.githubusercontent.com/tidyverse/ggplot2/master/man/figures/logo.png){.pull-right width=100px}
-
-No prizes for guessing mine:
-
 # My time went ... 
 
-What parts of your project take the most time and effort? Were there any surprising challenges you
-encountered, and how did you solve them?
+The most labour-intensive aspect of this project involved analysing the current (manual) report process and transposing this into an R workflow. 
+
+Because so much of the manual process involves hands-on copying/pasting, substituting of fields, filtering, creating pivot table summaries and so forth, the major challenge was identifying the best approach in R, using the experience I'd gained to date.
+
+At times this process was incredibly frustrating, though I found that most of the issues could be overcome by taking a step back and thinking about a particular part of the process in the simplest possible way. Asking lots of questions helped as well! When worst came to worst, I'd simpley get a large sheet of paper out and draw out the process for the upteenth time. Once I was immersed back in the code, tried and true functions such as `filter()`, `split()`, `select()`, `mutate()`, `rename()`, `group_by()` and `summarise()` were indispensable. 
 
 # Next steps
 
-What further steps do you wish your project could take? Or are there any new digital skills that you
-are keen to develop as a result of your involvement in the Data School?
+Although I managed to get the project up to the point where the workflow process executed perfectly (and accurately!), I would have really liked to reduce the volume of code in my script and find more efficient ways of performing certain functions. Duplication was an ongoing concern, and particular care needed to be taken to avoid errors.
+
+Looking ahead, I like to spend more time creating my own functions to avoid duplicated code as well as exploring Regular Expressions, strings and interation in greater detail. Above all, spending more time with the general theory of R is of great interest to me, insofar that I recently purchase the R For Data Science book for my iPad!
+
+Beyond R itself, becoming accustomed with other principles of Data Science and Data Management during this course has been enormously beneficial and I imagine that this will have valuable applications for myself and the rest of my Team in Finance.
 
 # My Data School Experience
+
+text text text text text text 
+
 
 This summary is mostly about your project. However we would also like to hear about other
 parts of your Data School experience. What aspects of the program did you really enjoy? Have you
@@ -217,3 +215,5 @@ knowledge to your team members? Any descriptions of the personal impact the prog
 had are welcome here as well!
 
 # Thank you:
+
+Stephen, Kerensa, Kristian, Helpers, Dan Nguyen [...]
