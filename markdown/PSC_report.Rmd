@@ -30,42 +30,44 @@ library(kableExtra)
 
 
 # Introduction
-I joined CSIRO in 2009 and worked in the Contract Administration Office until 2014. Since then, I've covered a variety of roles supporting Project Support, In-Business Finance, Research Office and currently the Project Support Centre (Corporate Finance.) Prior to commencing Data School I could code in HTML and a bit of C, but its applications were largely restricted to extra-curricular activities away from CSIRO. Learning R and aspect of Data Management appealed to me as an attractive and valuable skill that could be applied in practice for the purposes of reporting, file management systems and general compliance requirements.
+I joined CSIRO in 2009 and worked in the Contract Administration Centre until 2014. Since then, I've covered a variety of roles supporting Project Support, In-Business Finance, Research Office and currently the Project Support Centre (Corporate Finance.) Prior to commencing Data School I could code in HTML and a bit of C, but its applications were largely restricted to extra-curricular activities away from CSIRO. Learning R and aspect of Data Management appealed to me as an attractive and valuable skill that could be applied in practice for the purposes of reporting, file management systems and general compliance activities.
 
 # My Project
 
-This project could be best regarded as an attempt to replicate a process that is currently handled manually which consists of two primary components: 1) data import, wrangling and tidying; 2) visualisation and communication. This process is part of preparing the Project Support Centre (PSC) monthly report, which informs part of the wider Finance Support Centre reporting.
+#### From manual input to R workflow
+
+This project could be best regarded as an attempt to replicate a process that is currently handled manually which consists of two primary components: 1) data import, wrangling and tidying; 2) visualisation and communication. 
+
+
+#### The PSC Monthly report
+
+This process is part of preparing data the Project Support Centre (PSC) monthly report. The PSC monthly summary reports on the status of tasks recorded across JIRA and O2D, and these inform part of the larger Finance Support Centre reporting at month's end.
+
+
+#### Issues with the manual process
 
 One of the identified issues with preparation of the PSC report is that it is currently a manual process and is time-consuming and potentially prone to data duplication and human errors. 
 
 
+#### The R workflow: replicating a manual process in Excel
 
-In order to build this demo poster correctly, you will also need to have installed the `tidyverse`, 
-`gapminder`, and `kableExtra` packages.
+In order to take this manual process and realise it as an R workflow, I would need to take the manual work currently done in Excel (copy/paste, filtering, pivot tables, cell references, etc) and replicate this as R code, employing a number of functions and successive dataframes to ensure the data was going to the right place.  
 
-**TEXT HERE DETAILING BACKGROUND OF PROJECT, ISSUES WITH MANUAL PROCESS, DUPLICATION/HUMAN ERROR ETC. text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text**
+#### Wrangling, tidying, transforming
 
-** !! Include an image of what the report looked like on the original spreadsheet, maybe include a screengrab of what the raw data looked like too. **
-
-** A snippet of the Miro process mapping might be good.**
-
-![](resources/img/tidyverse.png){width=100px}
+The goal of the main R workflow was to wrangle large chunks of data - extracted from JIRA nad O2D - and transform this into concise summaries of open and completed JIRA and O2D tasks for each month. From here, the summaries are brought together and comprise a complete summary of the Financial Year-To-Date. For the purposes of the PSC report, only the open statuses need to be reported upon.
 
 ## Preliminary results
 
-This section will demonstrate the different visuals you might want use to show off your 
-project. Don't feel the need to go overboard, this is supposed to give a taste of the work you are
-doing rather than being a publication ready document.
-
-To get tables formatting correctly, use `knitr::kable` to convert the table to html format. If
-you also want to have alternate row highlighting, pass the result to `kable_styling('striped')` 
-from the `kableExtra` package.
+This section will demonstrate visualisations.
 
 
+#### Visualisation of reporting data
 
-** This is a test version of a table generated from data **
+**text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text**
 
-```{(Code text here)}```
+The table and plot detailed above are the key elements incorporated into the PSC Report. In addition to replicating this .... I thought I would see how some of these visualisations could be represented as animations ....
+
 
 ```{r}
 
@@ -131,16 +133,13 @@ PSC_open_long <-
 
 # generate a table of Open PSC Tasks based on the long data tibble.
 
-knitr::kable(head(PSC_open_long, n = 7), format = "html", caption = "Open PSC tasks: 2019-20 FY") %>% 
+knitr::kable(head(PSC_open_long, n = 7), format = "html", caption = "Open PSC tasks: 2019-20 FY (up to Apr-20") %>% 
   kable_styling("striped")
 
 ```
 
 
-
-**Acutal text to follow: below is a chart detailing Open PSC tasks for FY 2019-20. text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text**
-
-```{r standard-plot, out.width='80%', fig.align='left', fig.height= 4, fig.width=8, fig.cap="Open PSC tasks: 2019-20 FY"}
+```{r standard-plot, out.width='80%', fig.align='left', fig.height= 4, fig.width=8, fig.cap="Open PSC tasks: 2019-20 FY (up to Apr-20"}
 
 PSC_open <- PSC_open_gathered %>% 
   ggplot(aes(x = month, y = n, fill = Task)) +
@@ -166,24 +165,20 @@ PSC_open
 
 ```
 
-Here's an animation of the above chart. I think the animated aspect lends greater insight into the work volume over the course of the year and indicates particular trends.
 
-This animation incorporates transition_time() and shadow_mark() functions, whilst an ease_aes() function smooths the transitions. The timing of the animation is controlled further by rendering the animation using the animate() function.
+#### Animation of plots
+
+The following is an animation of the above chart. I think the animated aspect lends greater insight into task volume over the course of the year and is indicative of particular trends, especially prior to and following the EOFY period.
+
+The animation incorporates `transition_time()` and `shadow_mark()` functions, whilst an `ease_aes()` function smooths the transitions. The timing of the animation is controlled further by rendering the animation using the `animate()` function.
 
 ![](resources/img/PSC_open.gif){height=400px, width=800px}
 
-Whilst this animation details both Open and Completed PSC Tasks from month-to-month over the 2019-20 FY. I'm not entirely sure how informative it is at this stage. However, it could definitely be improved by fixing the date stamp and replacing this with the name of the month instead.
+Although this next animation is less useful for the purposes of reporting, I thought it would be interesting to examine both open and completed task statuses transitioned over each month, utilising a `facetwrap()` function to position each task status side-by-side for comparison. A potential improvement to the animated plot could be to fix the date stamp and replace this with the name of the month following each transition state.
 
 ![](resources/img/PSC_combined.gif){height=500px, width=500px}
 
-
-///////////////////////////////////////////////////
-
-
-Your figure and table captions are automatically numbered and can be referenced in the text
-if needed: see eg. Table \@ref(tab:mytable) and Figure \@ref(fig:standard-plot)
-
-# My Digital Toolbox
+# My Digital Toolbox (TBC)
 
 What digital tools have you been using in your project? Do you expect that everything will be able 
 to be completed within R, or will you need to work with multiple tools to get the right result?
@@ -195,7 +190,7 @@ You can use all the usual R markdown features in writing a project summary, incl
 * Python
 * SQL
 
-## Favourite tool (optional)
+## Favourite tool (TBC)
 
 Is there a tool/package/function in particular that you've enjoyed using? Give it a special shout out here. What about this tool makes it your favourite?
 
@@ -203,7 +198,7 @@ Is there a tool/package/function in particular that you've enjoyed using? Give i
 
 No prizes for guessing mine:
 
-# My time went ...
+# My time went ... 
 
 What parts of your project take the most time and effort? Were there any surprising challenges you
 encountered, and how did you solve them?
