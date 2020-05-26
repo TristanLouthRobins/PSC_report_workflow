@@ -1,6 +1,6 @@
 ---
-title: Project Support Centre Monthly Reporting (Draft)
-subtitle: Streamlining report creation using R workflows
+title: Project Support Centre Monthly Reporting 
+subtitle: Streamlining report creation using an R workflow
 short_title: PSC Reporting
 
 author:  Tristan Louth-Robins
@@ -30,32 +30,34 @@ library(kableExtra)
 
 
 # Introduction
-I joined CSIRO in 2009 and worked in the Contract Administration Centre until 2014. Since then, I've covered a variety of roles supporting Project Support, In-Business Finance, Research Office and currently the Project Support Centre (Corporate Finance.) Prior to commencing Data School I could code in HTML and a bit of C, but its applications were largely restricted to extra-curricular activities away from CSIRO. Learning R and aspect of Data Management appealed to me as an attractive and valuable skill that could be applied in practice for the purposes of reporting, file management systems and general compliance activities.
+I joined CSIRO in 2009 and worked in the Contract Administration Centre until 2014. Since then, I've covered a variety of roles supporting Project Support, In-Business Finance, the Research Office and currently the Project Support Centre (Corporate Finance.) Prior to commencing Data School, I could code competently in HTML and a little C, but its applications were largely restricted to extra-curricular activities away from CSIRO. Learning R and aspects of Data Management appealed to me as an attractive and valuable skill that could be applied in practice for the purposes of reporting, file management systems and general compliance activities.
 
 # My Project
 
 #### From manual input to R workflow
 
-This project could be best regarded as an attempt to replicate a process that is currently handled manually and consists of two primary components: 1) data import, wrangling and tidying; 2) visualisation and communication. 
+This project could be best regarded as an attempt to replicate a process that is currently handled manually and consists of two primary components: 1) importing raw data, wrangling, tidying and transforming; 2) visualising and communicating. In this respect, R seemed like a perfect fit for the task at hand.
 
 
 #### The PSC Monthly report
 
-This process is part of preparing data the Project Support Centre (PSC) monthly report. The PSC monthly summary reports on the status of open and completed tasks, recorded across JIRA and O2D. These statuses inform part of the larger Finance Support Centre reporting at month's end.
+This process consists of preparing a dataset for the Project Support Centre (PSC) monthly report. The monthly summary reports on the status of open and completed tasks, which have been recorded across JIRA and O2D. This summary ultimately informs part of the larger Finance Support Centre reporting at month's end.
 
 
 #### Issues with the manual process
 
-One of the present issues with preparation of the PSC report is that it is currently a manual process and is both time-consuming and potentially prone to data duplication and human errors. Therefore, I felt that R could have the potential to efficiently wrangle, tidy and tranform JIRA and O2D data, resulting in accurate reporting data.
+One of the present issues with preparation of the PSC report is that it is a manual process and is therefore both time-consuming and potentially prone to data duplication and human error. I had to take this existing process and realise it through the application of R, taking JIRA and O2D data and transforming it efficiently, resulting in an end-goal of an accurate data summary for reporting on.
 
 
 #### The R workflow: replicating a manual process in Excel
 
-In order to take this manual process and realise it as an R workflow, I would need to take the manual work currently done in Excel (copy/paste, filtering, pivot tables, cell references, etc) and replicate this as R code, employing a number of functions and successive dataframes to ensure the data was going to the right place.  
+In order to take this manual process and realise it as an R workflow, I would need to take the manual work steps currently performed across Excel (multiple spreadsheets, copying/pasting, filtering, pivot tables, cell references, etc) and replicate this in R code, employing a number of functions and successive dataframes to ensure the data was consilidated and going to the right place at the right time.  
 
 #### Wrangling, tidying, transforming
 
-The goal of the main R workflow was to wrangle large chunks of data - extracted from JIRA nad O2D - and transform this into concise summaries of open and completed JIRA and O2D tasks for each month. From here, the summaries are brought together with previous month data and comprise a complete summary of the Financial Year-To-Date. For the purposes of the PSC report, only the open statuses need to be reported upon.
+The goal of the main R workflow was to wrangle large chunks of data - extracted from JIRA and O2D - and transform this into concise summaries of open and completed JIRA and O2D tasks for a given month. From here, the summaries are brought together, comprising of current and previous monthly data for an up-to-date summary of the Financial Year-To-Date. 
+
+**For the purposes of the PSC report, only the open statuses needed to be reported upon.**
 
 ## Preliminary results
 
@@ -63,7 +65,7 @@ The goal of the main R workflow was to wrangle large chunks of data - extracted 
 
 The following table and plot are the key components of the PSC Monthly Report, and form the basis of its presentation. 
 
-To present this data in Markdown, I have utilised internal R Markdown code to read in the data summary generated from my R workflow, assigned new variables and used these as datatables for table and plots details open PSC tasks across the 2019-20 FY.
+To present this data in Markdown, I have utilised internal R Markdown code to read in the data summary generated from my R workflows, assign new variables and used these datatables for table and plots detailing PSC tasks across the 2019-20 FY.
 
 
 ```{r}
@@ -144,7 +146,7 @@ PSC_open <- PSC_open_gathered %>%
   scale_fill_brewer(palette = "Paired") +
   labs(
     title = "Open PSC tasks: 2019-20 FY (up to Apr-20)",
-    x = "Month",
+    x = " ",
     y = "Count",
     colour = "Task"
   ) + 
@@ -165,55 +167,54 @@ PSC_open
 
 #### Animation of plots
 
+Although I don't imagine animation forming the basis of any reporting in the immediate future, I thought it would be good to include here. If only as a demonstration of its potential to provide enhanced insight into summarised data.
+
 The following is an animation of the above chart. I think the animated aspect lends greater insight into task volume over the course of the year and is indicative of particular trends, especially prior to and following the EOFY period.
 
 The animation incorporates `transition_time()` and `shadow_mark()` functions, whilst an `ease_aes()` function smooths the transitions. The timing of the animation is controlled further by rendering the animation using the `animate()` function.
 
 ![](resources/img/PSC_open.gif){height=400px, width=800px}
 
-Although this next animation is less useful for the purposes of reporting, I thought it would be interesting to examine both open and completed task statuses transitioned over each month, utilising a `facetwrap()` function to position each task status side-by-side for comparison. A potential improvement to the animated plot could be to fix the date stamp and replace this with the name of the month following each transition state.
+Although this next animation is less useful for the purposes of reporting, I thought it would be interesting to examine both open and completed task statuses transitioned over each month, utilising a `facetwrap()` function to position each task status side-by-side for comparison. 
+
+A potential improvement to the animated plot could be to fix the date stamp and replace this with the name of the month following each monthly transition.
 
 ![](resources/img/PSC_combined.gif){height=500px, width=500px}
 
-# My Digital Toolbox (TBC)
+# My Digital Toolbox
 
-What digital tools have you been using in your project? Do you expect that everything will be able 
-to be completed within R, or will you need to work with multiple tools to get the right result?
-Which of the digital skills needed for your project have you learned since starting Data School?
+The `tidyverse` and `ggplot` libraries have been the primary tools I've used for the project.
 
-You can use all the usual R markdown features in writing a project summary, including lists:
+At this stage, I feel like I've got a workable 'readymade' of how I imagine the finished project will perform. However, features such as interactivity (i.e. `shiny`) are very tempting to explore further and could be of great benefit to end-users in the future.
 
-* R - dplyr, ggplot, ...
-* Python
-* SQL
+As this project is revisited in the coming weeks and months, it will be interesting to see what other tools might be applied to best realise the goals and ultimate outcome of the workflow project.
 
 # My time went ... 
 
 The most labour-intensive aspect of this project involved analysing the current (manual) report process and transposing this into an R workflow. 
 
-Because so much of the manual process involves hands-on copying/pasting, substituting of fields, filtering, creating pivot table summaries and so forth, the major challenge was identifying the best approach in R, using the experience I'd gained to date.
+Because so much of the manual process involved hands-on copying/pasting, substituting of fields, filtering, creating pivot table summaries and so forth, the major challenge was identifying practical approaches in R and drawing from the experience I'd gained to date.
 
-At times this process was incredibly frustrating, though I found that most of the issues could be overcome by taking a step back and thinking about a particular part of the process in the simplest possible way. Asking lots of questions helped as well! When worst came to worst, I'd simpley get a large sheet of paper out and draw out the process for the upteenth time. Once I was immersed back in the code, tried and true functions such as `filter()`, `split()`, `select()`, `mutate()`, `rename()`, `group_by()` and `summarise()` were indispensable. 
+At times, this process was incredibly frustrating, though I found that most of the issues could be overcome by taking a step back and thinking about a particular part of the process in the simplest possible way. Asking lots of questions helped as well! When worst came to worst, I'd simply get a large sheet of paper out and draw out the process for the upteenth time. Once I was immersed back in the code, tried and true functions such as `filter()`, `split()`, `select()`, `mutate()`, `rename()`, `group_by()` and `summarise()` were indispensable. 
 
 # Next steps
 
-Although I managed to get the project up to the point where the workflow process executed perfectly (and accurately!), I would have really liked to reduce the volume of code in my script and find more efficient ways of performing certain functions. Duplication was an ongoing concern, and particular care needed to be taken to avoid errors.
+Although I managed to get the project up to the point where the workflow process executed near-perfectly (and accurately!), I would have really liked to reduce the volume of code in my script and find more efficient ways of performing certain functions. Duplication was an ongoing concern, and particular care needed to be taken to avoid errors.
 
-Looking ahead, I like to spend more time creating my own functions to avoid duplicated code as well as exploring Regular Expressions, strings and interation in greater detail. Above all, spending more time with the general theory of R is of great interest to me, insofar that I recently purchase the R For Data Science book for my iPad!
+Looking ahead, I would like to spend more time creating my own functions to avoid duplicated code as well as exploring regular expressions, strings and iteration in greater detail. Above all, spending more time with the general theory of R is a key motivator; insofar, that I recently purchased the **R For Data Science book** for my iPad!
 
-Beyond R itself, becoming accustomed with other principles of Data Science and Data Management during this course has been enormously beneficial and I imagine that this will have valuable applications for myself and the rest of my Team in Finance.
+Beyond R itself, becoming accustomed with other principles of Data Science and Data Management during this course has been enormously beneficial and I imagine that this will have valuable applications for myself and the rest of my Team in Finance going forward.
 
 # My Data School Experience
 
-text text text text text text 
+My time with Data School has been an interesting and hugely rewarding experience. At the start of the course I was quite unsure of how my project might fit into the world of Data Science; and being amongst scientists and researchers certainly made me feel a little out of my depth (and out of place) from time to time. Nevertheless, as I gained more exposure to the fundamentals of R, Data Science and the general philosophy of Data School I felt much more at home and this eventually assured my project was on the right track and in good company.
 
-
-This summary is mostly about your project. However we would also like to hear about other
-parts of your Data School experience. What aspects of the program did you really enjoy? Have you
-tried applying the skills you have learned in your daily work? Have you been able to transfer this 
-knowledge to your team members? Any descriptions of the personal impact the program has 
-had are welcome here as well!
+Looking ahead, I'm keen to share my experience with my immediate Team and the wider CSIRO Finance community. Data School is a great platform for not only gaining and applying skills in R and Data Management, but being also part of a diverse, supportive and vibrant community.
 
 # Thank you:
 
-Stephen, Kerensa, Kristian, Helpers, Dan Nguyen [...]
+I would like to take this opportunity to extend my huge thanks to our amazing instructors, Stephen and Kerensa, whose knowlege, suggestions and patience have been an invaluable resource to draw from over the past ten weeks. 
+
+Thanks to our gracious and accomodating facilitator, Kristian; the vast community of Data School Helpers, as well as my Finance-based helper, Dan Nguyen. 
+
+Thanks also to my managers, Creswell  and Dikesh for allowing me the flexibility to undertake this course. Lastly, my thanks must also go out to my immediate Team members, Lisa and Maree in Project Support for providing vital cover whilst I've up to my neck in code and managing a swelling head.  
