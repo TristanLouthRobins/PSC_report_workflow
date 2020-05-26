@@ -57,7 +57,7 @@ In order to take this manual process and realise it as an R workflow, I would ne
 
 The goal of the R workflow was to wrangle large chunks of data - extracted from JIRA and O2D - and transform this into concise summaries of open and completed JIRA/O2D tasks for a given month. From here, the summaries are brought together, comprising of current and previous monthly data for an up-to-date summary of the Financial Year-To-Date. 
 
-**For the purposes of the PSC report, only the open statuses needed to be reported upon.**
+NOTE: For the purposes of the PSC report, only the open statuses needed to be reported upon.
 
 ## Preliminary results
 
@@ -207,7 +207,7 @@ Beyond R itself, becoming accustomed with other principles of Data Science and D
 
 # My Data School Experience
 
-My time with Data School has been an interesting and hugely rewarding experience. At the start of the course I was quite unsure of how my project might fit into the world of Data Science; and being amongst scientists and researchers certainly made me feel a little out of my depth (and out of place) from time to time. Nevertheless, as I gained more exposure to the fundamentals of R, Data Science and the general philosophy of Data School I felt much more at home and this eventually assured my project was on the right track and in good company.
+My time with Data School has been an interesting and hugely rewarding experience. At the start of the course I was quite unsure of how my project might fit into the world of Data Science, whilst learning amongst scientists and researchers certainly made me feel a little out of my depth (and out of place) from time to time. Nevertheless, as I gained more exposure to the fundamentals of R, Data Science and the general philosophy of Data School I felt much more at home and this eventually assured me that my project was on the right track and in good company.
 
 Looking ahead, I'm keen to share my experience with my immediate Team and the wider CSIRO Finance community. Data School is a great platform for not only gaining and applying skills in R and Data Management, but being also part of a diverse, supportive and vibrant community.
 
