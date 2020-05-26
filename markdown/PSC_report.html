@@ -192,7 +192,7 @@ summary {
 
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>I joined CSIRO in 2009 and worked in the Contract Administration Centre until 2014. Since then, I’ve covered a variety of roles supporting Project Support, In-Business Finance, the Research Office and currently the Project Support Centre (Corporate Finance.) Prior to commencing Data School, I could code competently in HTML and a little C, but its applications were largely restricted to extra-curricular activities away from CSIRO. Learning R and aspects of Data Management appealed to me as an attractive and valuable skill that could be applied in practice for the purposes of reporting, file management systems and general compliance activities.</p>
+<p>I joined CSIRO in 2009 and worked in the Contract Administration Centre until 2014. Since then, I’ve covered a variety of roles supporting Project Support, In-Business Finance, the Research Office and currently the Project Support Centre (Corporate Finance.) Prior to commencing Data School, I could code competently in HTML and a little C, but its applications were largely restricted to extra-curricular activities away from CSIRO. Learning R and aspects of Data Management appealed to me as an attractive and valuable skill that could be applied in practice for the purposes of reporting, data management systems and general compliance activities.</p>
 </div>
 <div id="my-project" class="section level1">
 <h1>My Project</h1>
@@ -202,11 +202,11 @@ summary {
 </div>
 <div id="the-psc-monthly-report" class="section level4">
 <h4>The PSC Monthly report</h4>
-<p>This process consists of preparing a dataset for the Project Support Centre (PSC) monthly report. The monthly summary reports on the status of open and completed tasks, which have been recorded across JIRA and O2D. This summary ultimately informs part of the larger Finance Support Centre reporting at month’s end.</p>
+<p>The current manual process consists of preparing a dataset for the Project Support Centre (PSC) monthly report. The monthly summary reports on the status of open and completed tasks, which have been recorded across JIRA and O2D. This summary ultimately informs part of the larger Finance Support Centre reporting at month end.</p>
 </div>
 <div id="issues-with-the-manual-process" class="section level4">
 <h4>Issues with the manual process</h4>
-<p>One of the present issues with preparation of the PSC report is that it is a manual process and is therefore both time-consuming and potentially prone to data duplication and human error. I had to take this existing process and realise it through the application of R, taking JIRA and O2D data and transforming it efficiently, resulting in an end-goal of an accurate data summary for reporting on.</p>
+<p>One of the present issues with preparation of the PSC report is that it is a manual process and is therefore both time-consuming and potentially prone to data duplication and human error. The goal of this project was to examine the exisiting process and realise it through the application of R, taking JIRA/O2D data and transforming it efficiently, resulting in an end-goal of an accurate data summary.</p>
 </div>
 <div id="the-r-workflow-replicating-a-manual-process-in-excel" class="section level4">
 <h4>The R workflow: replicating a manual process in Excel</h4>
@@ -214,7 +214,7 @@ summary {
 </div>
 <div id="wrangling-tidying-transforming" class="section level4">
 <h4>Wrangling, tidying, transforming</h4>
-<p>The goal of the main R workflow was to wrangle large chunks of data - extracted from JIRA and O2D - and transform this into concise summaries of open and completed JIRA and O2D tasks for a given month. From here, the summaries are brought together, comprising of current and previous monthly data for an up-to-date summary of the Financial Year-To-Date.</p>
+<p>The goal of the R workflow was to wrangle large chunks of data - extracted from JIRA and O2D - and transform this into concise summaries of open and completed JIRA/O2D tasks for a given month. From here, the summaries are brought together, comprising of current and previous monthly data for an up-to-date summary of the Financial Year-To-Date.</p>
 <p><strong>For the purposes of the PSC report, only the open statuses needed to be reported upon.</strong></p>
 </div>
 <div id="preliminary-results" class="section level2">
@@ -222,10 +222,10 @@ summary {
 <div id="visualisation-of-data" class="section level4">
 <h4>Visualisation of data</h4>
 <p>The following table and plot are the key components of the PSC Monthly Report, and form the basis of its presentation.</p>
-<p>To present this data in Markdown, I have utilised internal R Markdown code to read in the data summary generated from my R workflows, assign new variables and used these datatables for table and plots detailing PSC tasks across the 2019-20 FY.</p>
+<p>To present this data in Markdown, I have utilised internal R Markdown code to read in the data summary generated from my R workflow, assign new variables and used these datatables for a table and plot detailing open PSC tasks across the 2019-20 FY.</p>
 <table class="table table-striped" style="margin-left: auto; margin-right: auto;">
 <caption>
-<span id="tab:unnamed-chunk-1">Table 1: </span>
+<span id="tab:unnamed-chunk-1">Table 1: </span>Open PSC tasks: 2019-20 FY (up to Apr-20)
 </caption>
 <thead>
 <tr>
@@ -569,7 +569,7 @@ Figure 1: Table summary of open PSC tasks for 2019-20 FY (up to April 2020)
 </div>
 <div id="animation-of-plots" class="section level4">
 <h4>Animation of plots</h4>
-<p>Although I don’t imagine animation forming the basis of any reporting in the immediate future, I thought it would be good to include here. If only as a demonstration of its potential to provide enhanced insight into summarised data.</p>
+<p>Although I don’t imagine that animation will be incorporated into regular reporting in the immediate future, I thought it would be good to include some examples in this presentation. Since using <code>ggplot</code> I’ve noted <code>gganimate</code>’s potential to provide enhanced insight into summarised data.</p>
 <p>The following is an animation of the above chart. I think the animated aspect lends greater insight into task volume over the course of the year and is indicative of particular trends, especially prior to and following the EOFY period.</p>
 <p>The animation incorporates <code>transition_time()</code> and <code>shadow_mark()</code> functions, whilst an <code>ease_aes()</code> function smooths the transitions. The timing of the animation is controlled further by rendering the animation using the <code>animate()</code> function.</p>
 <div class="figure">
